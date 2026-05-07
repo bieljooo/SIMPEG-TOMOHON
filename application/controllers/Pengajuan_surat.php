@@ -21,6 +21,26 @@ class Pengajuan_surat extends CI_Controller {
         redirect('pengajuan_surat/surat_keterangan_sakit');
     }
 
+    public function cuti_kenaikan_pangkat()
+    {
+        $this->render_rekomendasi_placeholder('Usulan Kenaikan Pangkat');
+    }
+
+    public function pengajuan_cuti_tahun()
+    {
+        $this->render_rekomendasi_placeholder('Usulan Cuti Tahun');
+    }
+
+    public function cuti_alasan_penting()
+    {
+        $this->render_rekomendasi_placeholder('Usulan Alasan Penting');
+    }
+
+    public function kenaikan_gaji_berkala()
+    {
+        $this->render_rekomendasi_placeholder('Usulan Kenaikan Gaji Berkala');
+    }
+
     public function surat_keterangan_sakit()
     {
         $nip = $this->session->userdata('nip');
@@ -39,13 +59,23 @@ class Pengajuan_surat extends CI_Controller {
 
     public function download_surat()
     {
+        redirect('pengajuan_surat/download_surat_sakit');
+    }
+
+    public function download_surat_sakit()
+    {
         $nip = $this->session->userdata('nip');
-        $data['title'] = 'Download Surat';
+        $data['title'] = 'Download Surat Sakit';
         $data['surat_pegawai'] = $this->Pengajuan_surat_model->get_surat_pegawai_by_nip($nip);
 
         $this->load->view('templates/header_pegawai', $data);
         $this->load->view('pengajuan_surat/download_surat', $data);
         $this->load->view('templates/footer_pegawai');
+    }
+
+    public function download_surat_rekomendasi()
+    {
+        $this->render_rekomendasi_placeholder('Download');
     }
 
     public function simpan_surat_keterangan_sakit()
@@ -87,7 +117,7 @@ class Pengajuan_surat extends CI_Controller {
         ));
 
         $this->session->set_flashdata('success', 'Surat Keterangan Sakit berhasil dibuat dan siap diunduh.');
-        redirect('pengajuan_surat/download_surat');
+        redirect('pengajuan_surat/download_surat_sakit');
     }
 
     public function unduh_surat_keterangan_sakit($id)
@@ -149,6 +179,16 @@ class Pengajuan_surat extends CI_Controller {
         $dompdf->stream('surat-keterangan-sakit-' . $surat->id . '.pdf', array(
             'Attachment' => (bool) $is_download,
         ));
+    }
+
+    private function render_rekomendasi_placeholder($title)
+    {
+        $data['title'] = $title;
+        $data['placeholder_text'] = 'blum beking';
+
+        $this->load->view('templates/header_pegawai', $data);
+        $this->load->view('pengajuan_surat/placeholder', $data);
+        $this->load->view('templates/footer_pegawai');
     }
 
     private function is_valid_date($date)

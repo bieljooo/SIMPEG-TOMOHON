@@ -8,20 +8,24 @@
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://code.iconify.design/iconify-icon/2.2.0/iconify-icon.min.js"></script>
 
     <style>
         body {
             font-family: 'Source Sans Pro', sans-serif;
             font-size: 14px;
             background-color: #f4f6f9;
+        }
+
+        iconify-icon {
+            display: inline-block;
+            vertical-align: -0.125em;
         }
 
         /* Sidebar */
@@ -107,10 +111,11 @@
             border-left: 3px solid #63b3ed;
         }
 
-        .sidebar .nav-menu li a i {
+        .sidebar .nav-menu li a .app-icon {
             width: 20px;
             text-align: center;
-            font-size: 15px;
+            font-size: 18px;
+            flex-shrink: 0;
         }
 
         /* Navbar */
@@ -335,7 +340,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="brand">
             <div class="brand-icon">
-
+                <iconify-icon icon="mdi:office-building-outline" class="app-icon"></iconify-icon>
             </div>
             <div class="brand-text">
                 SIMPEG
@@ -347,21 +352,21 @@
         <ul class="nav-menu">
             <li>
                 <a href="<?= site_url('pegawai') ?>" class="<?= ($this->uri->segment(1) == 'pegawai' || $this->uri->segment(1) == '') ? 'active' : '' ?>">
-                    <i class="fas fa-users"></i>
+                    <iconify-icon icon="mdi:account-group-outline" class="app-icon"></iconify-icon>
                     <span><?= ($role === 'kasubag') ? 'Pegawai' : 'Data Pegawai' ?></span>
                 </a>
             </li>
             <?php if ($role === 'kasubag'): ?>
             <li>
                 <a href="<?= site_url('persetujuan_pegawai') ?>" class="<?= ($this->uri->segment(1) == 'persetujuan_pegawai') ? 'active' : '' ?>">
-                    <i class="fas fa-clipboard-check"></i>
+                    <iconify-icon icon="mdi:clipboard-check-outline" class="app-icon"></iconify-icon>
                     <span>Persetujuan Data Pegawai</span>
                 </a>
             </li>
             <?php else: ?>
             <li>
                 <a href="<?= site_url('surat') ?>" class="<?= ($this->uri->segment(1) == 'surat') ? 'active' : '' ?>">
-                    <i class="fas fa-envelope-open-text"></i>
+                    <iconify-icon icon="mdi:email-open-outline" class="app-icon"></iconify-icon>
                     <span>Surat</span>
                 </a>
             </li>
@@ -372,7 +377,7 @@
         <ul class="nav-menu">
             <li>
                 <a href="<?= site_url('auth/logout') ?>">
-                    <i class="fas fa-sign-out-alt"></i>
+                    <iconify-icon icon="mdi:logout" class="app-icon"></iconify-icon>
                     <span>Keluar</span>
                 </a>
             </li>
@@ -383,7 +388,7 @@
     <nav class="main-navbar">
         <div class="navbar-left">
             <button class="toggle-btn" onclick="document.getElementById('sidebar').classList.toggle('active')">
-                <i class="fas fa-bars"></i>
+                <iconify-icon icon="mdi:menu" class="app-icon"></iconify-icon>
             </button>
             <h1 class="page-title"><?= $title ?></h1>
         </div>

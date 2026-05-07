@@ -1,4 +1,4 @@
-<!-- Breadcrumb -->
+﻿<!-- Breadcrumb -->
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= site_url('pegawai') ?>">Home</a></li>
@@ -12,15 +12,15 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h3><i class="fas fa-user mr-2"></i>Detail Pegawai</h3>
+        <h3><iconify-icon icon="mdi:account-outline" class="mr-2"></iconify-icon>Detail Pegawai</h3>
         <div>
             <?php if (!$is_kasubag): ?>
             <a href="<?= site_url('pegawai/edit/'.$p->nip) ?>" class="btn btn-warning btn-sm">
-                <i class="fas fa-edit mr-1"></i> Edit
+                <iconify-icon icon="mdi:pencil-outline" class="mr-1"></iconify-icon> Edit
             </a>
             <?php endif; ?>
             <a href="<?= site_url('pegawai') ?>" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left mr-1"></i> Kembali
+                <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
             </a>
         </div>
     </div>
@@ -43,7 +43,7 @@
         <!-- Data Pribadi -->
         <div class="mb-3">
             <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                <i class="fas fa-user mr-2"></i>Data Pribadi
+                <iconify-icon icon="mdi:account-outline" class="mr-2"></iconify-icon>Data Pribadi
             </h5>
         </div>
         <div class="row mb-4">
@@ -88,7 +88,7 @@
         <!-- Data Kepegawaian -->
         <div class="mb-3">
             <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                <i class="fas fa-id-card mr-2"></i>Data Kepegawaian
+                <iconify-icon icon="mdi:card-account-details-outline" class="mr-2"></iconify-icon>Data Kepegawaian
             </h5>
         </div>
         <div class="row mb-4">
@@ -137,7 +137,7 @@
         <!-- Data Pendidikan -->
         <div class="mb-3">
             <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                <i class="fas fa-graduation-cap mr-2"></i>Data Pendidikan
+                <iconify-icon icon="mdi:school-outline" class="mr-2"></iconify-icon>Data Pendidikan
             </h5>
         </div>
         <div class="row mb-4">
@@ -171,7 +171,7 @@
         <?php if ($p->keterangan): ?>
         <div class="mb-3">
             <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                <i class="fas fa-sticky-note mr-2"></i>Keterangan
+                <iconify-icon icon="mdi:note-text-outline" class="mr-2"></iconify-icon>Keterangan
             </h5>
         </div>
         <p style="color:#4a5568"><?= $p->keterangan ?></p>
@@ -179,3 +179,4 @@
 
     </div>
 </div>
+

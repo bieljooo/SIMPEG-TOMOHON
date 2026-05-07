@@ -1,4 +1,4 @@
-<!-- Breadcrumb -->
+﻿<!-- Breadcrumb -->
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= site_url('pegawai') ?>">Home</a></li>
@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#ebf4ff;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-users" style="font-size:20px;color:#3182ce"></i>
+                    <iconify-icon icon="mdi:account-group-outline" style="font-size:20px;color:#3182ce"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= count($pegawai) ?></div>
@@ -27,7 +27,7 @@
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#fef3f2;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-male" style="font-size:20px;color:#3182ce"></i>
+                    <iconify-icon icon="mdi:human-male" style="font-size:20px;color:#3182ce"></iconify-icon>
                 </div>
                 <div>
                     <?php $laki = 0;
@@ -44,7 +44,7 @@
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#fdf2f8;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-female" style="font-size:20px;color:#d53f8c"></i>
+                    <iconify-icon icon="mdi:human-female" style="font-size:20px;color:#d53f8c"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= count($pegawai) - $laki ?></div>
@@ -57,7 +57,7 @@
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#f0fff4;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-building" style="font-size:20px;color:#38a169"></i>
+                    <iconify-icon icon="mdi:office-building-outline" style="font-size:20px;color:#38a169"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748">DPMPTSPD</div>
@@ -71,10 +71,10 @@
 <!-- Data Table -->
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h3><i class="fas fa-table mr-2"></i>Daftar Pegawai</h3>
+        <h3><iconify-icon icon="mdi:table-large" class="mr-2"></iconify-icon>Daftar Pegawai</h3>
         <?php if (!$is_kasubag): ?>
         <a href="<?= site_url('pegawai/tambah') ?>" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus mr-1"></i> Tambah Pegawai
+            <iconify-icon icon="mdi:plus" class="mr-1"></iconify-icon> Tambah Pegawai
         </a>
         <?php endif; ?>
     </div>
@@ -115,14 +115,14 @@
                             <td><?= $p->tingkat_pendidikan ?></td>
                             <td class="text-center">
                                 <a href="<?= site_url('pegawai/detail/' . $p->nip) ?>" class="btn btn-info btn-sm" title="Detail">
-                                    <i class="fas fa-eye"></i>
+                                    <iconify-icon icon="mdi:eye-outline"></iconify-icon>
                                 </a>
                                 <?php if (!$is_kasubag): ?>
                                 <a href="<?= site_url('pegawai/edit/' . $p->nip) ?>" class="btn btn-warning btn-sm" title="Edit">
-                                    <i class="fas fa-edit"></i>
+                                    <iconify-icon icon="mdi:pencil-outline"></iconify-icon>
                                 </a>
                                 <button onclick="confirmDelete('<?= site_url('pegawai/hapus/' . $p->nip) ?>', '<?= addslashes($p->nama) ?>')" class="btn btn-danger btn-sm" title="Hapus">
-                                    <i class="fas fa-trash"></i>
+                                    <iconify-icon icon="mdi:trash-can-outline"></iconify-icon>
                                 </button>
                                 <?php endif; ?>
                             </td>
@@ -133,3 +133,4 @@
         </div>
     </div>
 </div>
+

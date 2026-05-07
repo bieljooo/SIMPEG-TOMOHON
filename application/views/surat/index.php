@@ -25,7 +25,7 @@ foreach ($surat_masuk as $item) {
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#ebf4ff;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-envelope-open-text" style="font-size:20px;color:#3182ce"></i>
+                    <iconify-icon icon="mdi:email-open-outline" style="font-size:20px;color:#3182ce"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $total_surat ?></div>
@@ -38,7 +38,7 @@ foreach ($surat_masuk as $item) {
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#fffaf0;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-hourglass-half" style="font-size:20px;color:#dd6b20"></i>
+                    <iconify-icon icon="mdi:timer-sand" style="font-size:20px;color:#dd6b20"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $belum_dinomori ?></div>
@@ -51,7 +51,7 @@ foreach ($surat_masuk as $item) {
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#f0fff4;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-check-circle" style="font-size:20px;color:#38a169"></i>
+                    <iconify-icon icon="mdi:check-circle-outline" style="font-size:20px;color:#38a169"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $sudah_dinomori ?></div>
@@ -64,7 +64,7 @@ foreach ($surat_masuk as $item) {
 
 <div class="card">
     <div class="card-header">
-        <h3><i class="fas fa-inbox mr-2"></i>Daftar Surat Masuk</h3>
+        <h3><iconify-icon icon="mdi:inbox-arrow-down-outline" class="mr-2"></iconify-icon>Daftar Surat Masuk</h3>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -108,7 +108,7 @@ foreach ($surat_masuk as $item) {
                             </td>
                             <td class="text-center">
                                 <a href="<?= site_url('surat/nomor/' . $item->id) ?>" class="btn btn-warning btn-sm" title="<?= empty($item->nomor_surat) ? 'Beri Nomor' : 'Ubah Nomor' ?>">
-                                    <i class="fas fa-hashtag"></i>
+                                    <iconify-icon icon="mdi:pound"></iconify-icon>
                                 </a>
                             </td>
                         </tr>

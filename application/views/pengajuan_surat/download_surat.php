@@ -2,8 +2,8 @@
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= site_url('dashboard') ?>">Home</a></li>
-        <li class="breadcrumb-item active">Pengajuan Surat</li>
-        <li class="breadcrumb-item active">Download Surat</li>
+        <li class="breadcrumb-item active">Surat Sakit</li>
+        <li class="breadcrumb-item active">Download</li>
     </ol>
 </nav>
 
@@ -14,11 +14,11 @@
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#ebf4ff;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-file-pdf" style="font-size:20px;color:#3182ce"></i>
+                    <iconify-icon icon="mdi:file-pdf-box" style="font-size:20px;color:#3182ce"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $total_surat ?></div>
-                    <div style="font-size:12px;color:#a0aec0;font-weight:500">Total Surat Saya</div>
+                    <div style="font-size:12px;color:#a0aec0;font-weight:500">Total Surat Sakit</div>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3><i class="fas fa-download mr-2"></i>Download Surat</h3>
+        <h3><iconify-icon icon="mdi:download-outline" class="mr-2"></iconify-icon>Download Surat Sakit</h3>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -46,7 +46,7 @@
                 <tbody>
                     <?php if (empty($surat_pegawai)): ?>
                         <tr>
-                            <td colspan="7" class="text-center text-muted">Belum ada surat yang bisa diunduh.</td>
+                            <td colspan="7" class="text-center text-muted">Belum ada surat sakit yang bisa diunduh.</td>
                         </tr>
                     <?php else: ?>
                         <?php $no = 1; foreach ($surat_pegawai as $item): ?>
@@ -62,10 +62,10 @@
                                 <td><?= $item->created_at ? date('d/m/Y H:i', strtotime($item->created_at)) : '-' ?></td>
                                 <td class="text-center">
                                     <a href="<?= site_url('pengajuan_surat/preview_surat_keterangan_sakit/' . $item->id) ?>" class="btn btn-info btn-sm" title="Preview PDF" target="_blank">
-                                        <i class="fas fa-eye"></i>
+                                        <iconify-icon icon="mdi:eye-outline"></iconify-icon>
                                     </a>
                                     <a href="<?= site_url('pengajuan_surat/unduh_surat_keterangan_sakit/' . $item->id) ?>" class="btn btn-primary btn-sm" title="Unduh PDF">
-                                        <i class="fas fa-download"></i>
+                                        <iconify-icon icon="mdi:download"></iconify-icon>
                                     </a>
                                 </td>
                             </tr>

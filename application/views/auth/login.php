@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login | SIMPEG DPMPTSPD</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://code.iconify.design/iconify-icon/2.2.0/iconify-icon.min.js"></script>
     <style>
         body {
             font-family: 'Source Sans Pro', sans-serif;
@@ -40,6 +40,10 @@
             color: #fff;
             font-size: 26px;
             margin-bottom: 14px;
+        }
+        iconify-icon {
+            display: inline-block;
+            vertical-align: -0.125em;
         }
         .login-header h4 {
             font-weight: 700;
@@ -84,22 +88,22 @@
 
 <div class="login-card">
     <div class="login-header">
-        <div class="icon"><i class="fas fa-building"></i></div>
+        <div class="icon"><iconify-icon icon="mdi:office-building-outline"></iconify-icon></div>
         <h4>SIMPEG DPMPTSPD</h4>
         <p>Dinas Penanaman Modal & Pelayanan Terpadu Satu Pintu</p>
     </div>
 
     <form action="<?= site_url('auth/login') ?>" method="POST">
         <div class="form-group">
-            <label><i class="fas fa-id-card mr-1"></i> NIP / Username</label>
+            <label><iconify-icon icon="mdi:card-account-details-outline" class="mr-1"></iconify-icon> NIP / Username</label>
             <input type="text" name="nip" class="form-control" placeholder="Masukkan NIP atau Username" required autofocus>
         </div>
         <div class="form-group">
-            <label><i class="fas fa-lock mr-1"></i> Password</label>
+            <label><iconify-icon icon="mdi:lock-outline" class="mr-1"></iconify-icon> Password</label>
             <input type="password" name="password" class="form-control" placeholder="Masukkan Password" required>
         </div>
         <button type="submit" class="btn btn-login mt-2">
-            <i class="fas fa-sign-in-alt mr-1"></i> Masuk
+            <iconify-icon icon="mdi:login-variant" class="mr-1"></iconify-icon> Masuk
         </button>
     </form>
 </div>
@@ -107,14 +111,25 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-<?php if ($this->session->flashdata('error')): ?>
+<?php
+$login_flash_notifications = array(
+    'success' => array('icon' => 'success', 'title' => 'Berhasil!'),
+    'error' => array('icon' => 'error', 'title' => 'Login Gagal'),
+    'warning' => array('icon' => 'warning', 'title' => 'Perhatian!'),
+    'info' => array('icon' => 'info', 'title' => 'Informasi'),
+);
+foreach ($login_flash_notifications as $flash_key => $flash_config):
+    if (!$this->session->flashdata($flash_key)) {
+        continue;
+    }
+?>
     Swal.fire({
-        icon: 'error',
-        title: 'Login Gagal',
-        text: '<?= $this->session->flashdata('error') ?>',
+        icon: '<?= $flash_config['icon'] ?>',
+        title: '<?= $flash_config['title'] ?>',
+        text: '<?= $this->session->flashdata($flash_key) ?>',
         showConfirmButton: true
     });
-<?php endif; ?>
+<?php endforeach; ?>
 </script>
 
 </body>

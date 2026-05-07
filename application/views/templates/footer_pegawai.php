@@ -16,30 +16,27 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // Flash message
-    <?php if ($this->session->flashdata('success')): ?>
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: '<?= $this->session->flashdata('success') ?>',
-            showConfirmButton: false,
-            timer: 2000,
-            toast: true,
-            position: 'top-end'
-        });
-    <?php endif; ?>
-
-    <?php if ($this->session->flashdata('error')): ?>
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: '<?= $this->session->flashdata('error') ?>',
-            showConfirmButton: false,
-            timer: 2500,
-            toast: true,
-            position: 'top-end'
-        });
-    <?php endif; ?>
+    <?php
+    $flash_notifications = array(
+        'success' => array('icon' => 'success', 'title' => 'Berhasil!', 'timer' => 2000),
+        'error' => array('icon' => 'error', 'title' => 'Gagal!', 'timer' => 2500),
+        'warning' => array('icon' => 'warning', 'title' => 'Perhatian!', 'timer' => 2500),
+        'info' => array('icon' => 'info', 'title' => 'Informasi', 'timer' => 2500),
+    );
+    ?>
+    <?php foreach ($flash_notifications as $flash_key => $flash_config): ?>
+        <?php if ($this->session->flashdata($flash_key)): ?>
+            Swal.fire({
+                icon: '<?= $flash_config['icon'] ?>',
+                title: '<?= $flash_config['title'] ?>',
+                text: '<?= $this->session->flashdata($flash_key) ?>',
+                showConfirmButton: false,
+                timer: <?= $flash_config['timer'] ?>,
+                toast: true,
+                position: 'top-end'
+            });
+        <?php endif; ?>
+    <?php endforeach; ?>
 </script>
 
 </body>

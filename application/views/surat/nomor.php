@@ -11,7 +11,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3><i class="fas fa-hashtag mr-2"></i>Beri Nomor Surat</h3>
+        <h3><iconify-icon icon="mdi:pound" class="mr-2"></iconify-icon>Beri Nomor Surat</h3>
     </div>
     <div class="card-body">
         <div class="row mb-4">
@@ -59,7 +59,7 @@
 
         <div class="mb-4">
             <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                <i class="fas fa-sticky-note mr-2"></i>Alasan / Keterangan
+                <iconify-icon icon="mdi:note-text-outline" class="mr-2"></iconify-icon>Alasan / Keterangan
             </h5>
             <p style="color:#4a5568;margin:12px 0 0"><?= nl2br(htmlspecialchars($s->alasan, ENT_QUOTES, 'UTF-8')) ?></p>
         </div>
@@ -73,10 +73,10 @@
             <hr>
             <div class="d-flex justify-content-between">
                 <a href="<?= site_url('surat') ?>" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali
+                    <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save mr-1"></i> Simpan Nomor Surat
+                    <iconify-icon icon="mdi:content-save-outline" class="mr-1"></iconify-icon> Simpan Nomor Surat
                 </button>
             </div>
         </form>

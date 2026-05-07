@@ -8,18 +8,22 @@
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://code.iconify.design/iconify-icon/2.2.0/iconify-icon.min.js"></script>
 
     <style>
         body {
             font-family: 'Source Sans Pro', sans-serif;
             font-size: 14px;
             background-color: #f4f6f9;
+        }
+
+        iconify-icon {
+            display: inline-block;
+            vertical-align: -0.125em;
         }
 
         /* Sidebar */
@@ -105,16 +109,17 @@
             border-left: 3px solid #63b3ed;
         }
 
-        .sidebar .nav-menu li a i {
+        .sidebar .nav-menu li a .app-icon {
             width: 20px;
             text-align: center;
-            font-size: 15px;
+            font-size: 18px;
+            flex-shrink: 0;
         }
 
         .sidebar .nav-menu li a .menu-caret {
             width: auto;
             margin-left: auto;
-            font-size: 12px;
+            font-size: 16px;
             transition: transform 0.2s;
         }
 
@@ -335,13 +340,32 @@
 
 <body>
 
-    <?php $is_pengajuan_menu = ($this->uri->segment(1) === 'pengajuan_surat'); ?>
+    <?php
+    $pengajuan_segment = $this->uri->segment(1) === 'pengajuan_surat' ? $this->uri->segment(2) : '';
+    $surat_sakit_segments = array(
+        '',
+        'surat_keterangan_sakit',
+        'download_surat',
+        'download_surat_sakit',
+    );
+    $surat_rekomendasi_segments = array(
+        'cuti_kenaikan_pangkat',
+        'pengajuan_cuti_tahun',
+        'cuti_alasan_penting',
+        'kenaikan_gaji_berkala',
+        'download_surat_rekomendasi',
+    );
+    $is_surat_sakit_menu = ($this->uri->segment(1) === 'pengajuan_surat' && in_array($pengajuan_segment, $surat_sakit_segments, TRUE));
+    $is_surat_sakit_form = ($this->uri->segment(1) === 'pengajuan_surat' && ($pengajuan_segment === '' || $pengajuan_segment === 'surat_keterangan_sakit'));
+    $is_surat_sakit_download = ($this->uri->segment(1) === 'pengajuan_surat' && in_array($pengajuan_segment, array('download_surat', 'download_surat_sakit'), TRUE));
+    $is_rekomendasi_menu = ($this->uri->segment(1) === 'pengajuan_surat' && in_array($pengajuan_segment, $surat_rekomendasi_segments, TRUE));
+    ?>
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="brand">
             <div class="brand-icon">
-
+                <iconify-icon icon="mdi:office-building-outline" class="app-icon"></iconify-icon>
             </div>
             <div class="brand-text">
                 SIMPEG
@@ -350,38 +374,82 @@
         </div>
 
         <div class="nav-section">Menu Utama</div>
+
+
         <ul class="nav-menu">
             <li>
                 <a href="<?= site_url('dashboard') ?>" class="<?= ($this->uri->segment(1) == 'dashboard' && $this->uri->segment(2) == '') ? 'active' : '' ?>">
-                    <i class="fas fa-user"></i>
+                    <iconify-icon icon="mdi:account-outline" class="app-icon"></iconify-icon>
                     <span>Data Diri</span>
                 </a>
             </li>
             <li>
                 <a
-                    class="nav-dropdown-toggle <?= $is_pengajuan_menu ? 'active' : '' ?>"
+                    class="nav-dropdown-toggle <?= $is_surat_sakit_menu ? 'active' : '' ?>"
                     data-toggle="collapse"
-                    href="#menuPengajuanSurat"
+                    href="#menuSuratSakit"
                     role="button"
-                    aria-expanded="<?= $is_pengajuan_menu ? 'true' : 'false' ?>"
-                    aria-controls="menuPengajuanSurat"
-                >
-                    <i class="fas fa-file-alt"></i>
-                    <span>Pengajuan Surat</span>
-                    <i class="fas fa-chevron-down menu-caret"></i>
+                    aria-expanded="<?= $is_surat_sakit_menu ? 'true' : 'false' ?>"
+                    aria-controls="menuSuratSakit">
+                    <iconify-icon icon="mdi:file-document-plus-outline" class="app-icon"></iconify-icon>
+                    <span>Surat Sakit</span>
+                    <iconify-icon icon="mdi:chevron-down" class="menu-caret"></iconify-icon>
                 </a>
-                <div class="collapse <?= $is_pengajuan_menu ? 'show' : '' ?>" id="menuPengajuanSurat">
+                <div class="collapse <?= $is_surat_sakit_menu ? 'show' : '' ?>" id="menuSuratSakit">
                     <ul class="nav-submenu">
                         <li>
-                            <a href="<?= site_url('pengajuan_surat/surat_keterangan_sakit') ?>" class="<?= ($this->uri->segment(1) == 'pengajuan_surat' && $this->uri->segment(2) == 'surat_keterangan_sakit') ? 'active' : '' ?>">
-                                <i class="fas fa-notes-medical"></i>
-                                <span>Surat Keterangan Sakit</span>
+                            <a href="<?= site_url('pengajuan_surat/surat_keterangan_sakit') ?>" class="<?= $is_surat_sakit_form ? 'active' : '' ?>">
+                                <iconify-icon icon="mdi:file-document-edit-outline" class="app-icon"></iconify-icon>
+                                <span>Buat Surat</span>
                             </a>
                         </li>
                         <li>
-                            <a href="<?= site_url('pengajuan_surat/download_surat') ?>" class="<?= ($this->uri->segment(1) == 'pengajuan_surat' && $this->uri->segment(2) == 'download_surat') ? 'active' : '' ?>">
-                                <i class="fas fa-file-download"></i>
-                                <span>Download Surat</span>
+                            <a href="<?= site_url('pengajuan_surat/download_surat_sakit') ?>" class="<?= $is_surat_sakit_download ? 'active' : '' ?>">
+                                <iconify-icon icon="mdi:download-outline" class="app-icon"></iconify-icon>
+                                <span>Download</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a
+                    class="nav-dropdown-toggle <?= $is_rekomendasi_menu ? 'active' : '' ?>"
+                    data-toggle="collapse"
+                    href="#menuSuratRekomendasi"
+                    role="button"
+                    aria-expanded="<?= $is_rekomendasi_menu ? 'true' : 'false' ?>"
+                    aria-controls="menuSuratRekomendasi">
+                    <iconify-icon icon="mdi:file-document-multiple-outline" class="app-icon"></iconify-icon>
+                    <span>Surat Rekomendasi</span>
+                    <iconify-icon icon="mdi:chevron-down" class="menu-caret"></iconify-icon>
+                </a>
+                <div class="collapse <?= $is_rekomendasi_menu ? 'show' : '' ?>" id="menuSuratRekomendasi">
+                    <ul class="nav-submenu">
+                        <li>
+                            <a href="<?= site_url('pengajuan_surat/cuti_kenaikan_pangkat') ?>" class="<?= ($pengajuan_segment === 'cuti_kenaikan_pangkat') ? 'active' : '' ?>">
+                                <span>Usulan Kenaikan Pangkat</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= site_url('pengajuan_surat/pengajuan_cuti_tahun') ?>" class="<?= ($pengajuan_segment === 'pengajuan_cuti_tahun') ? 'active' : '' ?>">
+                                <span>Usulan Cuti Tahun</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= site_url('pengajuan_surat/cuti_alasan_penting') ?>" class="<?= ($pengajuan_segment === 'cuti_alasan_penting') ? 'active' : '' ?>">
+                                <span>Usulan Alasan Penting</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= site_url('pengajuan_surat/kenaikan_gaji_berkala') ?>" class="<?= ($pengajuan_segment === 'kenaikan_gaji_berkala') ? 'active' : '' ?>">
+                                <span>Usulan Kenaikan Gaji Berkala</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= site_url('pengajuan_surat/download_surat_rekomendasi') ?>" class="<?= ($pengajuan_segment === 'download_surat_rekomendasi') ? 'active' : '' ?>">
+                                <iconify-icon icon="mdi:download-outline" class="app-icon"></iconify-icon>
+                                <span>Download</span>
                             </a>
                         </li>
                     </ul>
@@ -393,7 +461,7 @@
         <ul class="nav-menu">
             <li>
                 <a href="<?= site_url('auth/logout') ?>">
-                    <i class="fas fa-sign-out-alt"></i>
+                    <iconify-icon icon="mdi:logout" class="app-icon"></iconify-icon>
                     <span>Keluar</span>
                 </a>
             </li>
@@ -404,7 +472,7 @@
     <nav class="main-navbar">
         <div class="navbar-left">
             <button class="toggle-btn" onclick="document.getElementById('sidebar').classList.toggle('active')">
-                <i class="fas fa-bars"></i>
+                <iconify-icon icon="mdi:menu" class="app-icon"></iconify-icon>
             </button>
             <h1 class="page-title"><?= $title ?></h1>
         </div>

@@ -1,4 +1,4 @@
-<!-- Breadcrumb -->
+﻿<!-- Breadcrumb -->
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= site_url('dashboard') ?>">Home</a></li>
@@ -11,7 +11,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3><i class="fas fa-user-edit mr-2"></i>Edit Data Diri</h3>
+        <h3><iconify-icon icon="mdi:account-edit-outline" class="mr-2"></iconify-icon>Edit Data Diri</h3>
     </div>
     <div class="card-body">
         <form action="<?= site_url('dashboard/update') ?>" method="POST">
@@ -19,7 +19,7 @@
             <!-- Data Pribadi -->
             <div class="mb-4">
                 <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                    <i class="fas fa-user mr-2"></i>Data Pribadi
+                    <iconify-icon icon="mdi:account-outline" class="mr-2"></iconify-icon>Data Pribadi
                 </h5>
             </div>
 
@@ -83,7 +83,7 @@
             <!-- Data Kepegawaian -->
             <div class="mb-4 mt-4">
                 <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                    <i class="fas fa-id-card mr-2"></i>Data Kepegawaian
+                    <iconify-icon icon="mdi:card-account-details-outline" class="mr-2"></iconify-icon>Data Kepegawaian
                 </h5>
             </div>
 
@@ -155,7 +155,7 @@
             <!-- Data Pendidikan -->
             <div class="mb-4 mt-4">
                 <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                    <i class="fas fa-graduation-cap mr-2"></i>Data Pendidikan
+                    <iconify-icon icon="mdi:school-outline" class="mr-2"></iconify-icon>Data Pendidikan
                 </h5>
             </div>
 
@@ -195,13 +195,14 @@
             <hr>
             <div class="d-flex justify-content-between">
                 <a href="<?= site_url('dashboard') ?>" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali
+                    <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save mr-1"></i> Simpan Perubahan
+                    <iconify-icon icon="mdi:content-save-outline" class="mr-1"></iconify-icon> Simpan Perubahan
                 </button>
             </div>
 
         </form>
     </div>
 </div>
+

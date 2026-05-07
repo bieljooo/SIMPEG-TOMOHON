@@ -2,8 +2,7 @@
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= site_url('dashboard') ?>">Home</a></li>
-        <li class="breadcrumb-item active">Pengajuan Surat</li>
-        <li class="breadcrumb-item active">Surat Keterangan Sakit</li>
+        <li class="breadcrumb-item active">Surat Sakit</li>
     </ol>
 </nav>
 
@@ -12,7 +11,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3><i class="fas fa-notes-medical mr-2"></i>Form Surat Keterangan Sakit</h3>
+        <h3><iconify-icon icon="mdi:file-document-plus-outline" class="mr-2"></iconify-icon>Form Surat Keterangan Sakit</h3>
     </div>
     <div class="card-body">
         <div class="d-flex align-items-center mb-4 p-3" style="background:#f7fafc;border-radius:8px;border-left:4px solid #3182ce">
@@ -75,10 +74,10 @@
             <hr>
             <div class="d-flex justify-content-between">
                 <a href="<?= site_url('dashboard') ?>" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali
+                    <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-file-pdf mr-1"></i> Buat Surat
+                    <iconify-icon icon="mdi:file-pdf-box" class="mr-1"></iconify-icon> Buat Surat
                 </button>
             </div>
         </form>

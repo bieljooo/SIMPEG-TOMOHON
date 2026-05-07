@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#ebf4ff;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-user-clock" style="font-size:20px;color:#3182ce"></i>
+                    <iconify-icon icon="mdi:account-clock-outline" style="font-size:20px;color:#3182ce"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $total_pengajuan ?></div>
@@ -26,7 +26,7 @@
         <div class="card">
             <div class="card-body d-flex align-items-center">
                 <div style="width:45px;height:45px;border-radius:10px;background:#f0fff4;display:flex;align-items:center;justify-content:center;margin-right:14px">
-                    <i class="fas fa-user-check" style="font-size:20px;color:#38a169"></i>
+                    <iconify-icon icon="mdi:account-check-outline" style="font-size:20px;color:#38a169"></iconify-icon>
                 </div>
                 <div>
                     <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $this->session->userdata('nama') ?></div>
@@ -39,7 +39,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3><i class="fas fa-clipboard-check mr-2"></i>Daftar Persetujuan Data Pegawai</h3>
+        <h3><iconify-icon icon="mdi:clipboard-check-outline" class="mr-2"></iconify-icon>Daftar Persetujuan Data Pegawai</h3>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -71,11 +71,11 @@
                             <td><?= $item->tingkat_pendidikan ?: '-' ?></td>
                             <td class="text-center">
                                 <a href="<?= site_url('persetujuan_pegawai/detail/' . $item->id) ?>" class="btn btn-info btn-sm" title="View">
-                                    <i class="fas fa-eye"></i>
+                                    <iconify-icon icon="mdi:eye-outline"></iconify-icon>
                                 </a>
                                 <form id="approve-form-<?= $item->id ?>" action="<?= site_url('persetujuan_pegawai/setujui/' . $item->id) ?>" method="POST" style="display:inline">
                                     <button type="button" onclick="confirmApproval('approve-form-<?= $item->id ?>', '<?= addslashes($item->nama) ?>')" class="btn btn-success btn-sm" title="Setujui">
-                                        <i class="fas fa-check mr-1"></i> Setujui
+                                        <iconify-icon icon="mdi:check" class="mr-1"></iconify-icon> Setujui
                                     </button>
                                 </form>
                             </td>
