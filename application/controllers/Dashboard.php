@@ -46,11 +46,7 @@ class Dashboard extends CI_Controller {
 
     public function settings()
     {
-        $data['title'] = 'Settings';
-
-        $this->load->view('templates/header_pegawai', $data);
-        $this->load->view('dashboard/settings', $data);
-        $this->load->view('templates/footer_pegawai');
+        redirect('settings');
     }
 
     public function update()

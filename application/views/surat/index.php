@@ -107,8 +107,8 @@ foreach ($surat_masuk as $item) {
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">
-                                <a href="<?= site_url('surat/nomor/' . $item->id) ?>" class="btn btn-warning btn-sm" title="<?= empty($item->nomor_surat) ? 'Beri Nomor' : 'Ubah Nomor' ?>">
-                                    <iconify-icon icon="mdi:pound"></iconify-icon>
+                                <a href="<?= site_url('surat/nomor/' . $item->id) ?>" class="btn btn-secondary btn-sm" title="<?= empty($item->nomor_surat) ? 'Beri Nomor' : 'Ubah Nomor' ?>">
+                                    <iconify-icon icon="mdi:format-list-numbered"></iconify-icon>
                                 </a>
                             </td>
                         </tr>

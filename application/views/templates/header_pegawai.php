@@ -29,6 +29,8 @@
 
     <?php
     $display_name = $this->session->userdata('nama') ?: 'Pegawai';
+    $profile_photo = $this->session->userdata('foto_profil');
+    $profile_position = $this->session->userdata('foto_posisi') ?: 'center center';
     $pengajuan_segment = $this->uri->segment(1) === 'pengajuan_surat' ? $this->uri->segment(2) : '';
     $surat_sakit_segments = array(
         '',
@@ -145,9 +147,9 @@
                         </div>
                     </li>
                     <li data-menu-search="settings pengaturan">
-                        <a href="<?= site_url('dashboard/settings') ?>" class="<?= ($this->uri->segment(1) == 'dashboard' && $this->uri->segment(2) == 'settings') ? 'active' : '' ?>">
+                        <a href="<?= site_url('settings') ?>" class="<?= ($this->uri->segment(1) == 'settings' || ($this->uri->segment(1) == 'dashboard' && $this->uri->segment(2) == 'settings')) ? 'active' : '' ?>">
                             <iconify-icon icon="mdi:cog-outline" class="app-icon"></iconify-icon>
-                            <span>Settings</span>
+                            <span>Pengaturan</span>
                         </a>
                     </li>
                 </ul>
@@ -189,7 +191,11 @@
                     <strong><?= $display_name ?></strong>
                     <small>Pegawai</small>
                 </div>
+                <?php if (!empty($profile_photo)): ?>
+                <div class="user-avatar user-avatar-photo" style="background-image:url('<?= base_url($profile_photo) ?>');background-position:<?= htmlspecialchars($profile_position, ENT_QUOTES, 'UTF-8') ?>;"></div>
+                <?php else: ?>
                 <div class="user-avatar"><?= strtoupper(substr($display_name, 0, 1)) ?></div>
+                <?php endif; ?>
             </div>
         </div>
     </nav>

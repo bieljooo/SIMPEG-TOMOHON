@@ -36,6 +36,8 @@ class Auth extends CI_Controller {
             $session_data = array(
                 'user_id'   => $admin->id,
                 'nama'      => $admin->nama_lengkap,
+                'foto_profil' => property_exists($admin, 'foto_profil') ? $admin->foto_profil : NULL,
+                'foto_posisi' => property_exists($admin, 'foto_posisi') && $admin->foto_posisi ? $admin->foto_posisi : 'center center',
                 'role'      => $admin->role,
                 'logged_in' => TRUE
             );
@@ -53,6 +55,8 @@ class Auth extends CI_Controller {
             $session_data = array(
                 'nip'       => $user->nip,
                 'nama'      => $user->nama,
+                'foto_profil' => property_exists($user, 'foto_profil') ? $user->foto_profil : NULL,
+                'foto_posisi' => property_exists($user, 'foto_posisi') && $user->foto_posisi ? $user->foto_posisi : 'center center',
                 'role'      => $role,
                 'logged_in' => TRUE
             );
@@ -73,7 +77,7 @@ class Auth extends CI_Controller {
 
     private function set_login_session($session_data)
     {
-        $this->session->unset_userdata(array('user_id', 'nip', 'nama', 'role', 'logged_in'));
+        $this->session->unset_userdata(array('user_id', 'nip', 'nama', 'role', 'logged_in', 'foto_profil', 'foto_posisi'));
         $this->session->sess_regenerate(TRUE);
         $this->session->set_userdata($session_data);
     }

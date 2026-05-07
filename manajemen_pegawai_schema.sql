@@ -19,9 +19,12 @@ CREATE TABLE `pegawai` (
   `keterangan` text COLLATE utf8mb4_general_ci,
   `role` varchar(256) COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(256) COLLATE utf8mb4_general_ci NOT NULL,
+  `foto_profil` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `foto_posisi` varchar(30) COLLATE utf8mb4_general_ci DEFAULT 'center center',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`nip`)
+  PRIMARY KEY (`nip`),
+  KEY `idx_pegawai_nama` (`nama`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `pegawai_drh` (
@@ -97,7 +100,8 @@ CREATE TABLE `pengajuan_surat_sakit` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_pengajuan_surat_sakit_nip` (`nip`),
-  KEY `idx_pengajuan_surat_sakit_nomor_surat` (`nomor_surat`)
+  KEY `idx_pengajuan_surat_sakit_nomor_surat` (`nomor_surat`),
+  KEY `idx_pengajuan_surat_sakit_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `surat_pegawai` (
@@ -113,7 +117,8 @@ CREATE TABLE `surat_pegawai` (
   PRIMARY KEY (`id`),
   KEY `idx_surat_pegawai_nip` (`nip`),
   KEY `idx_surat_pegawai_penandatangan` (`penandatangan_nip`),
-  KEY `idx_surat_pegawai_tanggal_surat` (`tanggal_surat`)
+  KEY `idx_surat_pegawai_tanggal_surat` (`tanggal_surat`),
+  KEY `idx_surat_pegawai_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `users` (
@@ -124,6 +129,8 @@ CREATE TABLE `users` (
   `role` enum('admin','petugas','viewer') NOT NULL DEFAULT 'petugas',
   `nama_lengkap` varchar(200) DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `foto_profil` varchar(255) DEFAULT NULL,
+  `foto_posisi` varchar(30) DEFAULT 'center center',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

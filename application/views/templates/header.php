@@ -30,8 +30,10 @@
 
     <?php
     $role = $this->session->userdata('role');
-    $display_role = ($role === 'kasubag') ? 'Kasubag' : 'Petugas';
+    $display_role = ($role === 'kasubag') ? 'Kasubag' : (($role === 'admin') ? 'Admin' : 'Petugas');
     $display_name = $this->session->userdata('nama') ?: $display_role;
+    $profile_photo = $this->session->userdata('foto_profil');
+    $profile_position = $this->session->userdata('foto_posisi') ?: 'center center';
     $is_petugas_dashboard = ($this->uri->segment(1) === 'dashboard_petugas');
     ?>
 
@@ -52,7 +54,7 @@
             <div class="sidebar-scroll">
                 <div class="nav-section">Menu Utama</div>
                 <ul class="nav-menu">
-                    <?php if ($role !== 'kasubag'): ?>
+                    <?php if ($role === 'petugas'): ?>
                     <li data-menu-search="dashboard ringkasan petugas" data-page-link-group>
                         <a href="<?= site_url('dashboard_petugas') ?>" class="<?= $is_petugas_dashboard ? 'active' : '' ?>">
                             <iconify-icon icon="mdi:view-dashboard-outline" class="app-icon"></iconify-icon>
@@ -81,6 +83,12 @@
                         </a>
                     </li>
                     <?php endif; ?>
+                    <li data-menu-search="pengaturan settings akun password foto profil">
+                        <a href="<?= site_url('settings') ?>" class="<?= ($this->uri->segment(1) == 'settings') ? 'active' : '' ?>">
+                            <iconify-icon icon="mdi:cog-outline" class="app-icon"></iconify-icon>
+                            <span>Pengaturan</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -120,7 +128,11 @@
                     <strong><?= $display_name ?></strong>
                     <small><?= $display_role ?></small>
                 </div>
+                <?php if (!empty($profile_photo)): ?>
+                <div class="user-avatar user-avatar-photo" style="background-image:url('<?= base_url($profile_photo) ?>');background-position:<?= htmlspecialchars($profile_position, ENT_QUOTES, 'UTF-8') ?>;"></div>
+                <?php else: ?>
                 <div class="user-avatar"><?= strtoupper(substr($display_name, 0, 1)) ?></div>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
