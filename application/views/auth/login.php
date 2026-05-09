@@ -243,9 +243,9 @@
                 <div class="auth-login-logo">
                     <img src="<?= base_url('assets/images/logo-tomohon.png') ?>" alt="Logo Kota Tomohon">
                 </div>
-                <span class="auth-kicker">Sistem Informasi Data Kepegawaian</span>
+                <span class="auth-kicker">Sistem Informasi Manajemen Data Kepegawaian</span>
                 <div class="auth-card-header">
-                    <h2>Masuk ke sistem</h2>
+                    <h2>MASUK KE SISTEM</h2>
                     <p>Gunakan NIP atau username dan Password untuk melanjutkan.</p>
                 </div>
             </div>
@@ -270,7 +270,7 @@
                 </button>
             </form>
 
-            <div class="auth-footer-note">Akses hanya untuk akun resmi internal DPMPTSPD Kota Tomohon.</div>
+            <div class="auth-footer-note">Akses hanya untuk akun internal DPMPTSPD Kota Tomohon.</div>
         </section>
     </div>
 
@@ -297,55 +297,55 @@
             });
         <?php endforeach; ?>
 
-        (function () {
-            var loginForm = document.getElementById('loginForm');
-            var loginSubmitButton = document.getElementById('loginSubmitButton');
-            var passwordInput = document.getElementById('loginPassword');
-            var toggleButton = document.getElementById('loginPasswordToggle');
+            (function() {
+                var loginForm = document.getElementById('loginForm');
+                var loginSubmitButton = document.getElementById('loginSubmitButton');
+                var passwordInput = document.getElementById('loginPassword');
+                var toggleButton = document.getElementById('loginPasswordToggle');
 
-            if (loginForm) {
-                loginForm.dataset.submitting = '0';
+                if (loginForm) {
+                    loginForm.dataset.submitting = '0';
 
-                loginForm.addEventListener('submit', function (event) {
-                    if (loginForm.dataset.submitting === '1') {
-                        event.preventDefault();
-                        return;
-                    }
+                    loginForm.addEventListener('submit', function(event) {
+                        if (loginForm.dataset.submitting === '1') {
+                            event.preventDefault();
+                            return;
+                        }
 
-                    loginForm.dataset.submitting = '1';
+                        loginForm.dataset.submitting = '1';
 
-                    if (loginSubmitButton) {
-                        loginSubmitButton.disabled = true;
-                    }
+                        if (loginSubmitButton) {
+                            loginSubmitButton.disabled = true;
+                        }
 
-                    if (window.Swal && typeof window.Swal.fire === 'function') {
-                        Swal.fire({
-                            title: 'Sedang masuk...',
-                            text: 'Mohon tunggu sebentar.',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            showConfirmButton: false,
-                            didOpen: function () {
-                                Swal.showLoading();
-                            }
-                        });
-                    }
+                        if (window.Swal && typeof window.Swal.fire === 'function') {
+                            Swal.fire({
+                                title: 'Sedang masuk...',
+                                text: 'Mohon tunggu sebentar.',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                didOpen: function() {
+                                    Swal.showLoading();
+                                }
+                            });
+                        }
+                    });
+                }
+
+                if (!passwordInput || !toggleButton) {
+                    return;
+                }
+
+                toggleButton.addEventListener('click', function() {
+                    var isPassword = passwordInput.getAttribute('type') === 'password';
+
+                    passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                    toggleButton.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+                    toggleButton.setAttribute('aria-label', isPassword ? 'Sembunyikan password' : 'Tampilkan password');
+                    toggleButton.innerHTML = '<iconify-icon icon="' + (isPassword ? 'lucide:eye-off' : 'lucide:eye') + '"></iconify-icon>';
                 });
-            }
-
-            if (!passwordInput || !toggleButton) {
-                return;
-            }
-
-            toggleButton.addEventListener('click', function () {
-                var isPassword = passwordInput.getAttribute('type') === 'password';
-
-                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-                toggleButton.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
-                toggleButton.setAttribute('aria-label', isPassword ? 'Sembunyikan password' : 'Tampilkan password');
-                toggleButton.innerHTML = '<iconify-icon icon="' + (isPassword ? 'lucide:eye-off' : 'lucide:eye') + '"></iconify-icon>';
-            });
-        })();
+            })();
     </script>
 
 </body>
