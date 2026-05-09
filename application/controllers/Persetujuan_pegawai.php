@@ -72,4 +72,57 @@ class Persetujuan_pegawai extends CI_Controller {
         $this->session->set_flashdata('success', 'Data pegawai disetujui. Pegawai baru dapat login dengan password default password123.');
         redirect('persetujuan_pegawai');
     }
+
+    public function tolak($id)
+    {
+        $pending = $this->Pegawai_model->get_pending_by_id($id);
+
+        if (empty($pending)) {
+            show_404();
+        }
+
+        if ($pending->status !== 'pending') {
+            $this->session->set_flashdata('error', 'Data pegawai ini sudah diproses.');
+            redirect('persetujuan_pegawai');
+            return;
+        }
+
+        $rejected = $this->Pegawai_model->reject_pending(
+            $id,
+            $this->session->userdata('nip')
+        );
+
+        if (!$rejected) {
+            $this->session->set_flashdata('error', 'Penolakan data pegawai gagal diproses.');
+            redirect('persetujuan_pegawai');
+            return;
+        }
+
+        $this->session->set_flashdata('success', 'Data pegawai berhasil ditolak dan dipindahkan ke Draft Verifikasi.');
+        redirect('persetujuan_pegawai');
+    }
+
+    public function hapus($id)
+    {
+        $pending = $this->Pegawai_model->get_pending_by_id($id);
+
+        if (empty($pending)) {
+            show_404();
+        }
+
+        if ($pending->status !== 'pending') {
+            $this->session->set_flashdata('error', 'Hanya draft yang masih pending yang bisa dihapus.');
+            redirect('persetujuan_pegawai');
+            return;
+        }
+
+        if (!$this->Pegawai_model->delete_pending($id)) {
+            $this->session->set_flashdata('error', 'Data draft pegawai gagal dihapus.');
+            redirect('persetujuan_pegawai');
+            return;
+        }
+
+        $this->session->set_flashdata('success', 'Data draft pegawai berhasil dihapus.');
+        redirect('persetujuan_pegawai');
+    }
 }

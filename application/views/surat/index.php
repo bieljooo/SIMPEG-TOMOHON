@@ -1,8 +1,10 @@
 <!-- Breadcrumb -->
+<?php $home_url = ($this->session->userdata('role') === 'petugas') ? site_url('dashboard_petugas') : site_url('pegawai'); ?>
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= site_url('pegawai') ?>">Home</a></li>
-        <li class="breadcrumb-item active">Surat</li>
+        <li class="breadcrumb-item"><a href="<?= $home_url ?>">Home</a></li>
+        <li class="breadcrumb-item">Master Surat</li>
+        <li class="breadcrumb-item active">Surat Masuk</li>
     </ol>
 </nav>
 
@@ -62,13 +64,13 @@ foreach ($surat_masuk as $item) {
     </div>
 </div>
 
-<div class="card">
+<div class="card table-page-fit">
     <div class="card-header">
         <h3><iconify-icon icon="mdi:inbox-arrow-down-outline" class="mr-2"></iconify-icon>Daftar Surat Masuk</h3>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table id="dataTable" class="table table-bordered table-hover" style="width:100%">
+            <table id="dataTable" class="table table-bordered table-hover" style="width:100%" data-dt-search="true" data-dt-preserve-order="true">
                 <thead>
                     <tr>
                         <th style="width:40px">No</th>

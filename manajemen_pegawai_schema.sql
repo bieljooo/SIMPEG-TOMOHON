@@ -62,7 +62,7 @@ CREATE TABLE `pegawai_pending` (
   `jurusan` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tahun_lulus` year DEFAULT NULL,
   `alumni` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` enum('pending','approved') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+  `status` enum('pending','approved','rejected') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
   `approved_by` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `approved_at` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -120,6 +120,30 @@ CREATE TABLE `surat_pegawai` (
   KEY `idx_surat_pegawai_tanggal_surat` (`tanggal_surat`),
   KEY `idx_surat_pegawai_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `template_surat` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `kode_template` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_template` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `sub_menu` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `sort_order` tinyint NOT NULL DEFAULT '0',
+  `file_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `file_original_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `file_mime` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `file_size` int DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_template_surat_kode` (`kode_template`),
+  KEY `idx_template_surat_sort_order` (`sort_order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `template_surat` (`kode_template`, `nama_template`, `sub_menu`, `sort_order`) VALUES
+('surat_keterangan_sakit', 'Template Surat Keterangan Sakit', 'Surat Sakit', 1),
+('usulan_kenaikan_pangkat', 'Template Usulan Kenaikan Pangkat', 'Usulan Kenaikan Pangkat', 2),
+('usulan_cuti_tahun', 'Template Usulan Cuti Tahun', 'Usulan Cuti Tahun', 3),
+('usulan_alasan_penting', 'Template Usulan Alasan Penting', 'Usulan Alasan Penting', 4),
+('usulan_kenaikan_gaji_berkala', 'Template Usulan Kenaikan Gaji Berkala', 'Usulan Kenaikan Gaji Berkala', 5);
 
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,

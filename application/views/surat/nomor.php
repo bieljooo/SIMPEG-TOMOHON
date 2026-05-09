@@ -1,8 +1,10 @@
 <!-- Breadcrumb -->
+<?php $home_url = ($this->session->userdata('role') === 'petugas') ? site_url('dashboard_petugas') : site_url('pegawai'); ?>
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= site_url('pegawai') ?>">Home</a></li>
-        <li class="breadcrumb-item"><a href="<?= site_url('surat') ?>">Surat</a></li>
+        <li class="breadcrumb-item"><a href="<?= $home_url ?>">Home</a></li>
+        <li class="breadcrumb-item">Master Surat</li>
+        <li class="breadcrumb-item"><a href="<?= site_url('surat') ?>">Surat Masuk</a></li>
         <li class="breadcrumb-item active">Beri Nomor Surat</li>
     </ol>
 </nav>

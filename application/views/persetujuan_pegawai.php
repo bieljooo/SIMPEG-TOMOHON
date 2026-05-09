@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card table-page-fit">
     <div class="card-header">
         <h3><iconify-icon icon="mdi:clipboard-check-outline" class="mr-2"></iconify-icon>Daftar Persetujuan Data Pegawai</h3>
     </div>
@@ -52,7 +52,7 @@
                         <th>NIP</th>
                         <th>Jabatan</th>
                         <th>Pendidikan</th>
-                        <th style="width:160px">Aksi</th>
+                        <th style="width:220px">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,14 +70,21 @@
                             <td><?= $item->jabatan ?: '-' ?></td>
                             <td><?= $item->tingkat_pendidikan ?: '-' ?></td>
                             <td class="text-center">
-                                <a href="<?= site_url('persetujuan_pegawai/detail/' . $item->id) ?>" class="btn btn-info btn-sm" title="View">
-                                    <iconify-icon icon="mdi:eye-outline"></iconify-icon>
-                                </a>
-                                <form id="approve-form-<?= $item->id ?>" action="<?= site_url('persetujuan_pegawai/setujui/' . $item->id) ?>" method="POST" style="display:inline">
-                                    <button type="button" onclick="confirmApproval('approve-form-<?= $item->id ?>', '<?= addslashes($item->nama) ?>')" class="btn btn-success btn-sm" title="Setujui">
-                                        <iconify-icon icon="mdi:check" class="mr-1"></iconify-icon> Setujui
-                                    </button>
-                                </form>
+                                <div class="table-action-group">
+                                    <a href="<?= site_url('persetujuan_pegawai/detail/' . $item->id) ?>" class="btn btn-info btn-sm" title="View">
+                                        <iconify-icon icon="mdi:eye-outline"></iconify-icon>
+                                    </a>
+                                    <form id="approve-form-<?= $item->id ?>" action="<?= site_url('persetujuan_pegawai/setujui/' . $item->id) ?>" method="POST" style="display:inline">
+                                        <button type="button" onclick="confirmApproval('approve-form-<?= $item->id ?>', '<?= addslashes($item->nama) ?>')" class="btn btn-success btn-sm" title="Setujui">
+                                            <iconify-icon icon="mdi:check" class="mr-1"></iconify-icon> Setujui
+                                        </button>
+                                    </form>
+                                    <form id="reject-form-<?= $item->id ?>" action="<?= site_url('persetujuan_pegawai/tolak/' . $item->id) ?>" method="POST" style="display:inline">
+                                        <button type="button" onclick="confirmRejection('reject-form-<?= $item->id ?>', '<?= addslashes($item->nama) ?>')" class="btn btn-danger btn-sm" title="Tolak">
+                                            <iconify-icon icon="mdi:close-thick" class="mr-1"></iconify-icon> Tolak
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

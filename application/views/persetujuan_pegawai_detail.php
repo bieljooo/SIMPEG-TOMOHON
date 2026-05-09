@@ -27,7 +27,7 @@
             <div>
                 <h4 style="margin:0;color:#2d3748;font-weight:700"><?= $p->nama ?></h4>
                 <span style="color:#718096;font-size:14px">NIP: <?= $p->nip ?></span>
-                <span class="ml-3 badge badge-<?= ($p->jenis_kelamin == 'L') ? 'laki' : 'perempuan' ?>" style="font-size:12px">
+                <span class="ml-3 gender-label" style="font-size:12px">
                     <?= ($p->jenis_kelamin == 'L') ? 'Laki-laki' : 'Perempuan' ?>
                 </span>
             </div>

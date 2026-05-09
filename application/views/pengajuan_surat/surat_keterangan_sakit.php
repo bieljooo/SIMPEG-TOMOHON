@@ -25,7 +25,7 @@
         </div>
 
         <div class="mb-4 p-3" style="background:#ebf8ff;border-radius:8px;border-left:4px solid #63b3ed;color:#2c5282">
-            Setelah surat dibuat, file PDF bisa langsung diunduh pada menu <strong>Download Surat</strong>.
+            Setelah surat dibuat, file Word bisa langsung diunduh pada menu <strong>Download Surat</strong>.
         </div>
 
         <form action="<?= site_url('pengajuan_surat/simpan_surat_keterangan_sakit') ?>" method="POST">
@@ -77,7 +77,7 @@
                     <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <iconify-icon icon="mdi:file-pdf-box" class="mr-1"></iconify-icon> Buat Surat
+                    <iconify-icon icon="mdi:file-word-box" class="mr-1"></iconify-icon> Buat Surat
                 </button>
             </div>
         </form>

@@ -9,7 +9,8 @@ class Pegawai_model extends CI_Model {
         $this->db->from('pegawai');
         $this->db->join('pegawai_pribadi', 'pegawai_pribadi.nip = pegawai.nip', 'left');
         $this->db->join('pegawai_drh', 'pegawai_drh.nip = pegawai.nip', 'left');
-        $this->db->order_by('pegawai.nama', 'ASC');
+        $this->db->order_by('pegawai.created_at', 'ASC');
+        $this->db->order_by('pegawai.nip', 'ASC');
         return $this->db->get()->result();
     }
 
@@ -37,7 +38,27 @@ class Pegawai_model extends CI_Model {
 
     public function insert_pending($data)
     {
-        return $this->db->insert('pegawai_pending', $data);
+        $existing = $this->db
+            ->where('nip', $data['nip'])
+            ->get('pegawai_pending')
+            ->row();
+
+        if (empty($existing)) {
+            return $this->db->insert('pegawai_pending', $data);
+        }
+
+        if ($existing->status === 'pending') {
+            return FALSE;
+        }
+
+        $data['status'] = 'pending';
+        $data['approved_by'] = NULL;
+        $data['approved_at'] = NULL;
+        $data['created_at'] = date('Y-m-d H:i:s');
+
+        return $this->db
+            ->where('id', $existing->id)
+            ->update('pegawai_pending', $data);
     }
 
     public function update($nip, $pegawai, $pribadi, $drh)
@@ -108,6 +129,17 @@ class Pegawai_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function get_all_processed_drafts()
+    {
+        return $this->db
+            ->from('pegawai_pending')
+            ->where_in('status', array('approved', 'rejected'))
+            ->order_by('approved_at', 'DESC')
+            ->order_by('updated_at', 'DESC')
+            ->get()
+            ->result();
+    }
+
     public function get_pending_by_id($id)
     {
         return $this->db
@@ -174,5 +206,29 @@ class Pegawai_model extends CI_Model {
         $this->db->trans_complete();
 
         return $this->db->trans_status();
+    }
+
+    public function reject_pending($id, $approved_by)
+    {
+        $pending = $this->get_pending_by_id($id);
+
+        if (empty($pending) || $pending->status !== 'pending') {
+            return FALSE;
+        }
+
+        return $this->db
+            ->where('id', $id)
+            ->update('pegawai_pending', array(
+                'status' => 'rejected',
+                'approved_by' => $approved_by,
+                'approved_at' => date('Y-m-d H:i:s'),
+            ));
+    }
+
+    public function delete_pending($id)
+    {
+        return $this->db
+            ->where('id', $id)
+            ->delete('pegawai_pending');
     }
 }

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 
+<?php $shell_css_version = @filemtime(FCPATH . 'assets/css/simpeg-shell.css') ?: time(); ?>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="<?= base_url('assets/css/simpeg-shell.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/simpeg-shell.css?v=' . $shell_css_version) ?>">
     <script src="https://code.iconify.design/iconify-icon/2.2.0/iconify-icon.min.js"></script>
 </head>
 
@@ -94,7 +96,7 @@
                                         <span>Buat Surat</span>
                                     </a>
                                 </li>
-                                <li data-menu-search="download surat sakit pdf preview">
+                                <li data-menu-search="download surat sakit word">
                                     <a href="<?= site_url('pengajuan_surat/download_surat_sakit') ?>" class="<?= $is_surat_sakit_download ? 'active' : '' ?>">
                                         <iconify-icon icon="mdi:download-outline" class="app-icon"></iconify-icon>
                                         <span>Download</span>
@@ -146,17 +148,17 @@
                             </ul>
                         </div>
                     </li>
-                    <li data-menu-search="settings pengaturan">
-                        <a href="<?= site_url('settings') ?>" class="<?= ($this->uri->segment(1) == 'settings' || ($this->uri->segment(1) == 'dashboard' && $this->uri->segment(2) == 'settings')) ? 'active' : '' ?>">
-                            <iconify-icon icon="mdi:cog-outline" class="app-icon"></iconify-icon>
-                            <span>Pengaturan</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
 
             <div class="sidebar-footer">
-                <a href="<?= site_url('auth/logout') ?>" class="sidebar-utility-link">
+                <a href="<?= site_url('settings') ?>" class="sidebar-utility-link<?= ($this->uri->segment(1) == 'settings' || ($this->uri->segment(1) == 'dashboard' && $this->uri->segment(2) == 'settings')) ? ' active' : '' ?>">
+                    <span class="sidebar-utility-label">
+                        <iconify-icon icon="mdi:cog-outline"></iconify-icon>
+                        <span>Pengaturan</span>
+                    </span>
+                </a>
+                <a href="<?= site_url('auth/logout') ?>" class="sidebar-utility-link" data-logout-link>
                     <span class="sidebar-utility-label">
                         <iconify-icon icon="mdi:logout"></iconify-icon>
                         <span>Keluar</span>

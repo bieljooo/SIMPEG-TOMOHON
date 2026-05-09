@@ -7,6 +7,8 @@
 </nav>
 
 <?php $p = $pegawai; ?>
+<?php $profile_photo = $this->session->userdata('foto_profil'); ?>
+<?php $profile_position = $this->session->userdata('foto_posisi') ?: 'center center'; ?>
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -19,13 +21,17 @@
 
         <!-- Header Info -->
         <div class="d-flex align-items-center mb-4 p-3" style="background:#f7fafc;border-radius:8px;border-left:4px solid #3182ce">
+            <?php if (!empty($profile_photo)): ?>
+            <div class="user-avatar-photo" style="width:60px;height:60px;border-radius:50%;background-image:url('<?= base_url($profile_photo) ?>');background-position:<?= htmlspecialchars($profile_position, ENT_QUOTES, 'UTF-8') ?>;background-size:cover;background-repeat:no-repeat;margin-right:16px"></div>
+            <?php else: ?>
             <div style="width:60px;height:60px;border-radius:50%;background:#3182ce;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;margin-right:16px">
                 <?= strtoupper(substr($p->nama, 0, 1)) ?>
             </div>
+            <?php endif; ?>
             <div>
                 <h4 style="margin:0;color:#2d3748;font-weight:700"><?= $p->nama ?></h4>
                 <span style="color:#718096;font-size:14px">NIP: <?= $p->nip ?></span>
-                <span class="ml-3 badge badge-<?= ($p->jenis_kelamin == 'L') ? 'laki' : 'perempuan' ?>" style="font-size:12px">
+                <span class="ml-3 gender-label" style="font-size:12px">
                     <?= ($p->jenis_kelamin == 'L') ? 'Laki-laki' : 'Perempuan' ?>
                 </span>
             </div>

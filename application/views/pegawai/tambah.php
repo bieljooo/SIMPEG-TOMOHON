@@ -7,7 +7,7 @@
     </ol>
 </nav>
 
-<div class="card">
+<div class="card card-flat-shell pegawai-form-shell">
     <div class="card-header">
         <h3><iconify-icon icon="mdi:account-plus-outline" class="mr-2"></iconify-icon>Form Tambah Pegawai</h3>
     </div>

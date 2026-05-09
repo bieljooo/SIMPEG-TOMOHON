@@ -9,7 +9,7 @@
 <?php $is_kasubag = ($this->session->userdata('role') === 'kasubag'); ?>
 
 <!-- Data Table -->
-<div class="card">
+<div class="card card-flat-shell pegawai-table-fit">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3><iconify-icon icon="mdi:table-large" class="mr-2"></iconify-icon>Daftar Pegawai</h3>
         <?php if (!$is_kasubag): ?>
@@ -20,7 +20,7 @@
     </div>
     <div class="card-body p-0">
         <div class="table-shell-full">
-            <table id="dataTable" class="table table-bordered table-hover table-pegawai-full" style="width:100%">
+            <table id="dataTable" class="table table-bordered table-hover table-pegawai-full" style="width:100%" data-dt-search="true" data-dt-preserve-order="true">
                 <thead>
                     <tr>
                         <th style="width:40px">No</th>
@@ -48,7 +48,7 @@
                             <td><?= $p->pangkat_terakhir ?></td>
                             <td><?= $p->jabatan ?></td>
                             <td class="text-center">
-                                <span class="badge badge-<?= ($p->jenis_kelamin == 'L') ? 'laki' : 'perempuan' ?>">
+                                <span class="gender-code">
                                     <?= ($p->jenis_kelamin == 'L') ? 'L' : 'P' ?>
                                 </span>
                             </td>

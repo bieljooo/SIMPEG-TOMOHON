@@ -37,6 +37,14 @@ class Pengajuan_surat_model extends CI_Model {
         return $this->db->get()->row();
     }
 
+    public function delete_surat_pegawai($id, $nip)
+    {
+        return $this->db
+            ->where('id', (int) $id)
+            ->where('nip', $nip)
+            ->delete('surat_pegawai');
+    }
+
     public function get_all_surat_masuk()
     {
         $this->db->select('pengajuan_surat_sakit.*, pegawai.nama');

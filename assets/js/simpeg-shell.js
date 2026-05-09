@@ -1,6 +1,10 @@
 (function () {
     var themeKey = 'simpeg-theme';
 
+    function clearPageLeavingState() {
+        document.body.classList.remove('page-leaving');
+    }
+
     function getTheme() {
         try {
             return localStorage.getItem(themeKey) === 'dark' ? 'dark' : 'light';
@@ -62,6 +66,37 @@
         });
     }
 
+    function bindLogoutLoading() {
+        document.querySelectorAll('[data-logout-link]').forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                if (document.body.classList.contains('page-leaving')) {
+                    event.preventDefault();
+                    return;
+                }
+
+                event.preventDefault();
+                document.body.classList.add('page-leaving');
+
+                if (window.Swal && typeof window.Swal.fire === 'function') {
+                    window.Swal.fire({
+                        title: 'Sedang keluar...',
+                        text: 'Mohon tunggu sebentar.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: function () {
+                            window.Swal.showLoading();
+                        }
+                    });
+                }
+
+                window.setTimeout(function () {
+                    window.location.href = link.href;
+                }, 380);
+            });
+        });
+    }
+
     function bindPageTransition() {
         document.addEventListener('click', function (event) {
             var link = event.target.closest('a[href]');
@@ -75,10 +110,13 @@
             if (
                 event.defaultPrevented ||
                 link.target === '_blank' ||
+                (link.target && link.target !== '' && link.target !== '_self') ||
                 link.hasAttribute('download') ||
+                link.hasAttribute('data-no-transition') ||
                 href === '' ||
                 href.charAt(0) === '#' ||
                 href.indexOf('javascript:') === 0 ||
+                link.hasAttribute('data-logout-link') ||
                 link.getAttribute('data-toggle') === 'collapse' ||
                 event.ctrlKey ||
                 event.metaKey ||
@@ -102,15 +140,28 @@
             document.body.classList.add('page-leaving');
 
             window.setTimeout(function () {
+                if (document.visibilityState === 'visible') {
+                    clearPageLeavingState();
+                }
+            }, 1200);
+
+            window.setTimeout(function () {
                 window.location.href = targetUrl.href;
             }, 200);
         });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+        clearPageLeavingState();
         applyTheme(getTheme());
         bindThemeToggle();
         bindSidebarToggle();
+        bindLogoutLoading();
         bindPageTransition();
+    });
+
+    window.addEventListener('pageshow', clearPageLeavingState);
+    window.addEventListener('focus', function () {
+        window.setTimeout(clearPageLeavingState, 50);
     });
 })();

@@ -17,6 +17,23 @@
 <script src="<?= base_url('assets/js/simpeg-shell.js') ?>"></script>
 
 <script>
+    function confirmDeleteSurat(url, namaSurat) {
+        Swal.fire({
+            title: 'Hapus Surat?',
+            html: 'Anda yakin ingin menghapus <strong>' + namaSurat + '</strong>?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e53e3e',
+            cancelButtonColor: '#a0aec0',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+
     <?php
     $flash_notifications = array(
         'success' => array('icon' => 'success', 'title' => 'Berhasil!', 'timer' => 2000),

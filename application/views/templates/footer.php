@@ -28,14 +28,17 @@
             return;
         }
 
-        $table.DataTable({
-            "searching": false,
+        var enableSearch = String($table.data('dt-search')) === 'true';
+        var preserveOrder = String($table.data('dt-preserve-order')) === 'true';
+        var tableConfig = {
+            "searching": enableSearch,
             "language": {
                 "search": "Cari:",
                 "lengthMenu": "Tampilkan _MENU_ data",
                 "info": "Menampilkan _START_ - _END_ dari _TOTAL_ data",
                 "infoEmpty": "Tidak ada data",
                 "infoFiltered": "(difilter dari _MAX_ total data)",
+                "emptyTable": "Belum ada data untuk ditampilkan",
                 "zeroRecords": "Data tidak ditemukan",
                 "paginate": {
                     "first": "Awal",
@@ -45,10 +48,16 @@
                 }
             },
             "pageLength": 10,
-            "responsive": !$table.hasClass('table-pegawai-full'),
-            "scrollX": $table.hasClass('table-pegawai-full'),
+            "responsive": false,
+            "scrollX": true,
             "autoWidth": false
-        });
+        };
+
+        if (preserveOrder) {
+            tableConfig.order = [];
+        }
+
+        $table.DataTable(tableConfig);
     });
 
     // SweetAlert Delete Confirmation
@@ -78,6 +87,23 @@
             confirmButtonColor: '#38a169',
             cancelButtonColor: '#a0aec0',
             confirmButtonText: 'Ya, Setujui!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(formId).submit();
+            }
+        });
+    }
+
+    function confirmRejection(formId, nama) {
+        Swal.fire({
+            title: 'Tolak Data?',
+            html: 'Tolak data pegawai <strong>' + nama + '</strong>?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#f2aa3b',
+            cancelButtonColor: '#a0aec0',
+            confirmButtonText: 'Ya, Tolak!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {

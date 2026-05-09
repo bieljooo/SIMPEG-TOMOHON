@@ -71,9 +71,26 @@ class Pegawai extends CI_Controller {
             'alumni'             => $this->input->post('alumni', TRUE),
         );
 
-        $this->Pegawai_model->insert_pending($pending);
+        if (!$this->Pegawai_model->insert_pending($pending)) {
+            $this->session->set_flashdata('error', 'Data pegawai gagal diajukan. Silakan cek kembali data draft yang sudah pernah diproses.');
+            redirect('pegawai/tambah');
+            return;
+        }
+
         $this->session->set_flashdata('success', 'Data pegawai berhasil diajukan dan menunggu persetujuan Kasubag.');
         redirect('pegawai');
+    }
+
+    public function draft_verifikasi()
+    {
+        $this->guard_draft_verification_role();
+
+        $data['title'] = 'Draft Verifikasi';
+        $data['draft_verifikasi'] = $this->Pegawai_model->get_all_processed_drafts();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('pegawai/draft_verifikasi', $data);
+        $this->load->view('templates/footer');
     }
 
     public function edit($nip)
@@ -162,6 +179,15 @@ class Pegawai extends CI_Controller {
     {
         if ($this->session->userdata('role') === 'kasubag') {
             $this->session->set_flashdata('error', 'Role Kasubag hanya dapat melihat data pegawai.');
+            redirect('pegawai');
+            exit;
+        }
+    }
+
+    private function guard_draft_verification_role()
+    {
+        if ($this->session->userdata('role') !== 'petugas') {
+            $this->session->set_flashdata('error', 'Menu Draft Verifikasi hanya dapat diakses oleh role Petugas.');
             redirect('pegawai');
             exit;
         }

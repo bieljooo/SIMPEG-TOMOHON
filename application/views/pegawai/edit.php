@@ -9,7 +9,7 @@
 
 <?php $p = $pegawai; ?>
 
-<div class="card">
+<div class="card card-flat-shell pegawai-form-shell">
     <div class="card-header">
         <h3><iconify-icon icon="mdi:account-edit-outline" class="mr-2"></iconify-icon>Form Edit Pegawai</h3>
     </div>

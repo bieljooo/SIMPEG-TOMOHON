@@ -196,11 +196,35 @@ class Settings extends CI_Controller {
     {
         $value = strtolower(trim((string) $value));
 
-        if (!in_array($value, $this->photo_positions, TRUE)) {
-            return 'center center';
+        if ($value === '') {
+            return '50% 50%';
         }
 
-        return $value;
+        if (preg_match('/^(\d{1,3}(?:\.\d+)?)%\s+(\d{1,3}(?:\.\d+)?)%$/', $value, $matches)) {
+            $x = max(0, min(100, (float) $matches[1]));
+            $y = max(0, min(100, (float) $matches[2]));
+
+            return rtrim(rtrim(number_format($x, 2, '.', ''), '0'), '.') . '% ' .
+                rtrim(rtrim(number_format($y, 2, '.', ''), '0'), '.') . '%';
+        }
+
+        $legacy_positions = array(
+            'left top' => '0% 0%',
+            'center top' => '50% 0%',
+            'right top' => '100% 0%',
+            'left center' => '0% 50%',
+            'center center' => '50% 50%',
+            'right center' => '100% 50%',
+            'left bottom' => '0% 100%',
+            'center bottom' => '50% 100%',
+            'right bottom' => '100% 100%',
+        );
+
+        if (isset($legacy_positions[$value])) {
+            return $legacy_positions[$value];
+        }
+
+        return '50% 50%';
     }
 
     private function upload_profile_photo($field_name)
