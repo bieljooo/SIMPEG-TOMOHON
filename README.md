@@ -1,4 +1,4 @@
-# SIMPEG DPMPTSPD Kota Tomohon
+# SIMPEG DPMPTSPD KOTA TOMOHON BY GGGJ TEAM
 
 ![CodeIgniter](https://img.shields.io/badge/CodeIgniter-EF4223?style=for-the-badge&logo=codeigniter&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
