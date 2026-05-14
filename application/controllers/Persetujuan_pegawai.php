@@ -45,13 +45,15 @@ class Persetujuan_pegawai extends CI_Controller {
             show_404();
         }
 
+        $jenis = !empty($pending->jenis) ? strtolower(trim((string) $pending->jenis)) : 'baru';
+
         if ($pending->status !== 'pending') {
             $this->session->set_flashdata('error', 'Data pegawai ini sudah diproses.');
             redirect('persetujuan_pegawai');
             return;
         }
 
-        if ($this->Pegawai_model->nip_exists($pending->nip)) {
+        if ($jenis !== 'update' && $this->Pegawai_model->nip_exists($pending->nip)) {
             $this->session->set_flashdata('error', 'NIP ini sudah ada di data pegawai aktif.');
             redirect('persetujuan_pegawai');
             return;
@@ -69,7 +71,11 @@ class Persetujuan_pegawai extends CI_Controller {
             return;
         }
 
-        $this->session->set_flashdata('success', 'Data pegawai disetujui. Pegawai baru dapat login dengan password default ' . DEFAULT_PEGAWAI_PASSWORD . '.');
+        if ($jenis === 'update') {
+            $this->session->set_flashdata('success', 'Perubahan data pegawai berhasil disetujui.');
+        } else {
+            $this->session->set_flashdata('success', 'Data pegawai disetujui. Pegawai baru dapat login dengan password default ' . DEFAULT_PEGAWAI_PASSWORD . '.');
+        }
         redirect('persetujuan_pegawai');
     }
 
@@ -80,6 +86,8 @@ class Persetujuan_pegawai extends CI_Controller {
         if (empty($pending)) {
             show_404();
         }
+
+        $jenis = !empty($pending->jenis) ? strtolower(trim((string) $pending->jenis)) : 'baru';
 
         if ($pending->status !== 'pending') {
             $this->session->set_flashdata('error', 'Data pegawai ini sudah diproses.');
@@ -98,7 +106,11 @@ class Persetujuan_pegawai extends CI_Controller {
             return;
         }
 
-        $this->session->set_flashdata('success', 'Data pegawai berhasil ditolak dan dipindahkan ke Draft Verifikasi.');
+        if ($jenis === 'update') {
+            $this->session->set_flashdata('success', 'Perubahan data pegawai berhasil ditolak dan dipindahkan ke Draft Verifikasi.');
+        } else {
+            $this->session->set_flashdata('success', 'Data pegawai berhasil ditolak dan dipindahkan ke Draft Verifikasi.');
+        }
         redirect('persetujuan_pegawai');
     }
 

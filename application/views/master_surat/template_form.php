@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="card-footer d-flex justify-content-between">
-            <a href="<?= site_url('master_surat/template_surat') ?>" class="btn btn-secondary">
+            <a href="<?= site_url('master_surat/template_surat') ?>" class="btn btn-cancel-action">
                 <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon>Kembali
             </a>
             <button type="submit" class="btn btn-primary">

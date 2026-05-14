@@ -7,9 +7,13 @@ class Dashboard extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('Pegawai_model');
+        $this->load->helper('simpeg_pegawai');
 
-        // Hanya role pegawai yang boleh akses
-        if (!$this->session->userdata('logged_in') || $this->session->userdata('role') !== 'pegawai') {
+        // Hanya role pegawai, kasubag, kadis, dan sek yang boleh akses
+        if (
+            !$this->session->userdata('logged_in') ||
+            !in_array($this->session->userdata('role'), array('pegawai', 'kasubag', 'kadis', 'sek'), TRUE)
+        ) {
             redirect('auth');
         }
     }
@@ -52,12 +56,25 @@ class Dashboard extends CI_Controller {
     public function update()
     {
         $nip = $this->session->userdata('nip');
+        $current_pegawai = $this->Pegawai_model->get_by_nip($nip);
+
+        if (empty($current_pegawai)) {
+            show_404();
+        }
+
+        $pangkat_terakhir = trim((string) $this->input->post('pangkat_terakhir', TRUE));
+
+        if (!simpeg_is_valid_pangkat_terakhir($pangkat_terakhir, array($current_pegawai->pangkat_terakhir))) {
+            $this->session->set_flashdata('error', 'Pangkat / Gol. Ruang Terakhir harus dipilih dari daftar yang tersedia.');
+            redirect('dashboard/edit');
+            return;
+        }
 
         $pegawai = array(
             'nama'                => $this->input->post('nama', TRUE),
             'gol_ruang_cpns'      => $this->input->post('gol_ruang_cpns', TRUE),
             'tmt_cpns'            => $this->input->post('tmt_cpns', TRUE) ?: NULL,
-            'pangkat_terakhir'    => $this->input->post('pangkat_terakhir', TRUE),
+            'pangkat_terakhir'    => $pangkat_terakhir,
             'jenis_kelamin'       => $this->input->post('jenis_kelamin', TRUE),
             'jabatan'             => $this->input->post('jabatan', TRUE),
             'eselon'              => $this->input->post('eselon', TRUE),
@@ -81,6 +98,34 @@ class Dashboard extends CI_Controller {
             'tahun_lulus'        => $this->input->post('tahun_lulus', TRUE) ?: NULL,
             'alumni'             => $this->input->post('alumni', TRUE),
         );
+
+        if ((int) $current_pegawai->jabatan_urutan > 3) {
+            if ($this->Pegawai_model->pending_nip_exists($nip)) {
+                $this->session->set_flashdata('error', 'Masih ada perubahan data yang menunggu verifikasi Kasubag.');
+                redirect('dashboard/edit');
+                return;
+            }
+
+            $pending = array_merge(
+                array(
+                    'nip' => $nip,
+                    'jenis' => 'update',
+                ),
+                $pegawai,
+                $pribadi,
+                $drh
+            );
+
+            if (!$this->Pegawai_model->insert_pending($pending)) {
+                $this->session->set_flashdata('error', 'Perubahan data diri gagal diajukan. Silakan cek draft verifikasi yang sudah ada.');
+                redirect('dashboard/edit');
+                return;
+            }
+
+            $this->session->set_flashdata('success', 'Perubahan data diri berhasil diajukan dan menunggu verifikasi Kasubag.');
+            redirect('dashboard');
+            return;
+        }
 
         $this->Pegawai_model->update($nip, $pegawai, $pribadi, $drh);
 

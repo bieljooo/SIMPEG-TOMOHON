@@ -37,7 +37,7 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <a href="<?= site_url('pegawai/akun_pegawai') ?>" class="btn btn-secondary">
+                <a href="<?= site_url('pegawai/akun_pegawai') ?>" class="btn btn-cancel-action">
                     <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
                 </a>
                 <button type="submit" class="btn btn-action-save">

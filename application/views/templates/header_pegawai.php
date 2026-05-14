@@ -22,6 +22,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="<?= base_url('assets/css/simpeg-shell.css?v=' . $shell_css_version) ?>">
     <script src="https://code.iconify.design/iconify-icon/2.2.0/iconify-icon.min.js"></script>
@@ -30,10 +31,21 @@
 <body>
 
     <?php
+    $role = $this->session->userdata('role');
+    $display_role = ($role === 'kadis')
+        ? 'Kadis'
+        : (($role === 'sek')
+            ? 'Sek'
+            : (($role === 'kasubag') ? 'Kasubag' : 'Pegawai'));
     $display_name = $this->session->userdata('nama') ?: 'Pegawai';
     $profile_photo = $this->session->userdata('foto_profil');
     $profile_position = $this->session->userdata('foto_posisi') ?: 'center center';
     $pengajuan_segment = $this->uri->segment(1) === 'pengajuan_surat' ? $this->uri->segment(2) : '';
+    $pengajuan_view_source = strtolower(trim((string) $this->input->get('source', TRUE)));
+    $is_validasi_surat = ($this->uri->segment(1) === 'surat_pimpinan' && $this->uri->segment(2) === 'validasi_surat');
+    $is_verifikasi_surat = ($this->uri->segment(1) === 'surat_pimpinan' && $this->uri->segment(2) === 'verifikasi_surat');
+    $is_kasubag_pegawai = ($this->uri->segment(1) === 'pegawai');
+    $is_persetujuan_pegawai = ($this->uri->segment(1) === 'persetujuan_pegawai');
     $surat_sakit_segments = array(
         '',
         'surat_keterangan_sakit',
@@ -44,13 +56,19 @@
         'cuti_kenaikan_pangkat',
         'pengajuan_cuti_tahun',
         'cuti_alasan_penting',
+        'cuti_luar_negeri',
         'kenaikan_gaji_berkala',
+        'proses_surat',
         'download_surat_rekomendasi',
+        'view_surat_rekomendasi',
     );
     $is_surat_sakit_menu = ($this->uri->segment(1) === 'pengajuan_surat' && in_array($pengajuan_segment, $surat_sakit_segments, TRUE));
     $is_surat_sakit_form = ($this->uri->segment(1) === 'pengajuan_surat' && ($pengajuan_segment === '' || $pengajuan_segment === 'surat_keterangan_sakit'));
     $is_surat_sakit_download = ($this->uri->segment(1) === 'pengajuan_surat' && in_array($pengajuan_segment, array('download_surat', 'download_surat_sakit'), TRUE));
     $is_rekomendasi_menu = ($this->uri->segment(1) === 'pengajuan_surat' && in_array($pengajuan_segment, $surat_rekomendasi_segments, TRUE));
+    $is_rekomendasi_view = ($this->uri->segment(1) === 'pengajuan_surat' && $pengajuan_segment === 'view_surat_rekomendasi');
+    $is_rekomendasi_proses = ($pengajuan_segment === 'proses_surat') || ($is_rekomendasi_view && $pengajuan_view_source !== 'download');
+    $is_rekomendasi_download = ($pengajuan_segment === 'download_surat_rekomendasi') || ($is_rekomendasi_view && $pengajuan_view_source === 'download');
     ?>
 
     <div class="app-overlay" data-sidebar-overlay></div>
@@ -76,19 +94,20 @@
                             <span>Data Diri</span>
                         </a>
                     </li>
+                    <?php if (in_array($role, array('pegawai', 'kasubag', 'sek'), TRUE)): ?>
                     <li data-menu-search="surat sakit buat surat download surat sakit">
                         <a
-                            class="nav-dropdown-toggle <?= $is_surat_sakit_menu ? 'active' : '' ?>"
+                            class="nav-dropdown-toggle"
                             data-toggle="collapse"
                             href="#menuSuratSakit"
                             role="button"
-                            aria-expanded="true"
+                            aria-expanded="false"
                             aria-controls="menuSuratSakit">
                             <iconify-icon icon="mdi:file-document-plus-outline" class="app-icon"></iconify-icon>
                             <span>Surat Sakit</span>
                             <iconify-icon icon="mdi:chevron-down" class="menu-caret"></iconify-icon>
                         </a>
-                        <div class="collapse show" id="menuSuratSakit">
+                        <div class="collapse" id="menuSuratSakit">
                             <ul class="nav-submenu">
                                 <li data-menu-search="buat surat surat sakit form">
                                     <a href="<?= site_url('pengajuan_surat/surat_keterangan_sakit') ?>" class="<?= $is_surat_sakit_form ? 'active' : '' ?>">
@@ -105,33 +124,38 @@
                             </ul>
                         </div>
                     </li>
-                    <li data-menu-search="surat rekomendasi usulan kenaikan pangkat usulan cuti tahun usulan alasan penting usulan kenaikan gaji berkala download">
+                    <li data-menu-search="surat rekomendasi usulan kenaikan pangkat usulan cuti tahunan usulan cuti alasan penting usulan cuti luar negeri usulan kenaikan gaji berkala proses surat download">
                         <a
-                            class="nav-dropdown-toggle <?= $is_rekomendasi_menu ? 'active' : '' ?>"
+                            class="nav-dropdown-toggle"
                             data-toggle="collapse"
                             href="#menuSuratRekomendasi"
                             role="button"
-                            aria-expanded="true"
+                            aria-expanded="false"
                             aria-controls="menuSuratRekomendasi">
                             <iconify-icon icon="mdi:file-document-multiple-outline" class="app-icon"></iconify-icon>
                             <span>Surat Rekomendasi</span>
                             <iconify-icon icon="mdi:chevron-down" class="menu-caret"></iconify-icon>
                         </a>
-                        <div class="collapse show" id="menuSuratRekomendasi">
+                        <div class="collapse" id="menuSuratRekomendasi">
                             <ul class="nav-submenu">
                                 <li data-menu-search="usulan kenaikan pangkat">
                                     <a href="<?= site_url('pengajuan_surat/cuti_kenaikan_pangkat') ?>" class="<?= ($pengajuan_segment === 'cuti_kenaikan_pangkat') ? 'active' : '' ?>">
                                         <span>Usulan Kenaikan Pangkat</span>
                                     </a>
                                 </li>
-                                <li data-menu-search="usulan cuti tahun">
+                                <li data-menu-search="usulan cuti tahunan">
                                     <a href="<?= site_url('pengajuan_surat/pengajuan_cuti_tahun') ?>" class="<?= ($pengajuan_segment === 'pengajuan_cuti_tahun') ? 'active' : '' ?>">
-                                        <span>Usulan Cuti Tahun</span>
+                                        <span>Usulan Cuti Tahunan</span>
                                     </a>
                                 </li>
-                                <li data-menu-search="usulan alasan penting">
+                                <li data-menu-search="usulan cuti alasan penting">
                                     <a href="<?= site_url('pengajuan_surat/cuti_alasan_penting') ?>" class="<?= ($pengajuan_segment === 'cuti_alasan_penting') ? 'active' : '' ?>">
-                                        <span>Usulan Alasan Penting</span>
+                                        <span>Usulan Cuti Alasan Penting</span>
+                                    </a>
+                                </li>
+                                <li data-menu-search="usulan cuti luar negeri">
+                                    <a href="<?= site_url('pengajuan_surat/cuti_luar_negeri') ?>" class="<?= ($pengajuan_segment === 'cuti_luar_negeri') ? 'active' : '' ?>">
+                                        <span>Usulan Cuti Luar Negeri</span>
                                     </a>
                                 </li>
                                 <li data-menu-search="usulan kenaikan gaji berkala">
@@ -139,8 +163,13 @@
                                         <span>Usulan Kenaikan Gaji Berkala</span>
                                     </a>
                                 </li>
+                                <li data-menu-search="proses surat rekomendasi">
+                                    <a href="<?= site_url('pengajuan_surat/proses_surat') ?>" class="<?= $is_rekomendasi_proses ? 'active' : '' ?>">
+                                        <span>Proses Surat</span>
+                                    </a>
+                                </li>
                                 <li data-menu-search="download surat rekomendasi">
-                                    <a href="<?= site_url('pengajuan_surat/download_surat_rekomendasi') ?>" class="<?= ($pengajuan_segment === 'download_surat_rekomendasi') ? 'active' : '' ?>">
+                                    <a href="<?= site_url('pengajuan_surat/download_surat_rekomendasi') ?>" class="<?= $is_rekomendasi_download ? 'active' : '' ?>">
                                         <iconify-icon icon="mdi:download-outline" class="app-icon"></iconify-icon>
                                         <span>Download</span>
                                     </a>
@@ -148,6 +177,42 @@
                             </ul>
                         </div>
                     </li>
+                    <?php if ($role === 'kasubag'): ?>
+                    <li data-menu-search="pegawai data pegawai">
+                        <a href="<?= site_url('pegawai') ?>" class="<?= $is_kasubag_pegawai ? 'active' : '' ?>">
+                            <iconify-icon icon="mdi:account-group-outline" class="app-icon"></iconify-icon>
+                            <span>Pegawai</span>
+                        </a>
+                    </li>
+                    <li data-menu-search="persetujuan data pegawai">
+                        <a href="<?= site_url('persetujuan_pegawai') ?>" class="<?= $is_persetujuan_pegawai ? 'active' : '' ?>">
+                            <iconify-icon icon="mdi:clipboard-check-outline" class="app-icon"></iconify-icon>
+                            <span>Persetujuan Data Pegawai</span>
+                        </a>
+                    </li>
+                    <li data-menu-search="verifikasi surat">
+                        <a href="<?= site_url('surat_pimpinan/verifikasi_surat') ?>" class="<?= $is_verifikasi_surat ? 'active' : '' ?>">
+                            <iconify-icon icon="mdi:file-check-outline" class="app-icon"></iconify-icon>
+                            <span>Verifikasi Surat</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    <?php if ($role === 'sek'): ?>
+                    <li data-menu-search="verifikasi surat">
+                        <a href="<?= site_url('surat_pimpinan/verifikasi_surat') ?>" class="<?= $is_verifikasi_surat ? 'active' : '' ?>">
+                            <iconify-icon icon="mdi:file-check-outline" class="app-icon"></iconify-icon>
+                            <span>Verifikasi Surat</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    <?php elseif ($role === 'kadis'): ?>
+                    <li data-menu-search="validasi surat">
+                        <a href="<?= site_url('surat_pimpinan/validasi_surat') ?>" class="<?= $is_validasi_surat ? 'active' : '' ?>">
+                            <iconify-icon icon="mdi:clipboard-check-outline" class="app-icon"></iconify-icon>
+                            <span>Validasi Surat</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
@@ -183,7 +248,7 @@
                 <iconify-icon icon="mdi:menu"></iconify-icon>
             </button>
             <div class="page-heading">
-                <span class="page-kicker">Workspace Pegawai</span>
+                <span class="page-kicker">Workspace <?= $display_role ?></span>
                 <h1 class="page-title"><?= $title ?></h1>
             </div>
         </div>
@@ -191,7 +256,7 @@
             <div class="user-pill">
                 <div class="user-pill-copy">
                     <strong><?= $display_name ?></strong>
-                    <small>Pegawai</small>
+                    <small><?= $display_role ?></small>
                 </div>
                 <?php if (!empty($profile_photo)): ?>
                 <div class="user-avatar user-avatar-photo" style="background-image:url('<?= base_url($profile_photo) ?>');background-position:<?= htmlspecialchars($profile_position, ENT_QUOTES, 'UTF-8') ?>;"></div>

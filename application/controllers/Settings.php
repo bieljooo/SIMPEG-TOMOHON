@@ -161,7 +161,7 @@ class Settings extends CI_Controller {
 
     private function render_settings($data)
     {
-        if ($this->session->userdata('role') === 'pegawai') {
+        if (in_array($this->session->userdata('role'), array('pegawai', 'kasubag', 'kadis', 'sek'), TRUE)) {
             $this->load->view('templates/header_pegawai', $data);
             $this->load->view('settings/index', $data);
             $this->load->view('templates/footer_pegawai');
@@ -177,12 +177,8 @@ class Settings extends CI_Controller {
     {
         $role = $this->session->userdata('role');
 
-        if ($role === 'pegawai') {
+        if (in_array($role, array('pegawai', 'kasubag', 'kadis', 'sek'), TRUE)) {
             return site_url('dashboard');
-        }
-
-        if ($role === 'kasubag') {
-            return site_url('persetujuan_pegawai');
         }
 
         if ($role === 'petugas') {

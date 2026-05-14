@@ -12,6 +12,7 @@
         <h3><iconify-icon icon="mdi:account-plus-outline" class="mr-2"></iconify-icon>Form Tambah Pegawai</h3>
     </div>
     <div class="card-body">
+        <?php $pangkat_options = simpeg_prepare_pangkat_terakhir_options(set_value('pangkat_terakhir')); ?>
         <form action="<?= site_url('pegawai/simpan') ?>" method="POST">
 
             <!-- Data Pribadi -->
@@ -123,7 +124,12 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>Pangkat / Gol. Ruang Terakhir</label>
-                    <input type="text" name="pangkat_terakhir" class="form-control" placeholder="Contoh: Pembina Utama Muda/ IVc">
+                    <select name="pangkat_terakhir" class="form-control">
+                        <option value="">-- Pilih Pangkat / Gol. Ruang Terakhir --</option>
+                        <?php foreach ($pangkat_options as $option_value => $option_label): ?>
+                        <option value="<?= htmlspecialchars($option_value, ENT_QUOTES, 'UTF-8') ?>" <?= set_select('pangkat_terakhir', $option_value) ?>><?= htmlspecialchars($option_label, ENT_QUOTES, 'UTF-8') ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Jabatan</label>
@@ -208,7 +214,7 @@
 
             <hr>
             <div class="d-flex justify-content-between">
-                <a href="<?= site_url('pegawai') ?>" class="btn btn-secondary">
+                <a href="<?= site_url('pegawai') ?>" class="btn btn-cancel-action">
                     <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
                 </a>
                 <button type="submit" class="btn btn-primary">

@@ -3,12 +3,54 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Pegawai_model extends CI_Model {
 
+    public function get_jabatan_hierarchy_value($jabatan)
+    {
+        $jabatan = strtoupper(trim((string) $jabatan));
+
+        if ($jabatan === 'KEPALA DINAS') {
+            return 1;
+        }
+
+        if (strpos($jabatan, 'SEK') === 0) {
+            return 2;
+        }
+
+        if (strpos($jabatan, 'KASUBAG') === 0) {
+            return 3;
+        }
+
+        if (strpos($jabatan, 'KEPALA BIDANG') !== FALSE) {
+            return 4;
+        }
+
+        if (strpos($jabatan, 'PENATA PERIZINAN') === 0) {
+            return 5;
+        }
+
+        if (strpos($jabatan, 'ANALIS KEBIJAKAN') === 0) {
+            return 6;
+        }
+
+        return 99;
+    }
+
+    public function requires_kasubag_verification($jabatan)
+    {
+        return $this->get_jabatan_hierarchy_value($jabatan) > 3;
+    }
+
+    private function apply_jabatan_hierarchy_order()
+    {
+        $this->db->order_by('pegawai.jabatan_urutan', 'ASC');
+    }
+
     public function get_all()
     {
         $this->db->select('pegawai.*, pegawai_pribadi.tempat_lahir, pegawai_pribadi.tanggal_lahir, pegawai_pribadi.status_kawin, pegawai_pribadi.agama, pegawai_pribadi.alamat, pegawai_pribadi.no_telp, pegawai_drh.tingkat_pendidikan, pegawai_drh.jurusan, pegawai_drh.tahun_lulus, pegawai_drh.alumni');
         $this->db->from('pegawai');
         $this->db->join('pegawai_pribadi', 'pegawai_pribadi.nip = pegawai.nip', 'left');
         $this->db->join('pegawai_drh', 'pegawai_drh.nip = pegawai.nip', 'left');
+        $this->apply_jabatan_hierarchy_order();
         $this->db->order_by('pegawai.created_at', 'ASC');
         $this->db->order_by('pegawai.nip', 'ASC');
         return $this->db->get()->result();
@@ -26,13 +68,12 @@ class Pegawai_model extends CI_Model {
 
     public function get_all_accounts()
     {
-        return $this->db
-            ->select('nama, nip')
-            ->from('pegawai')
-            ->order_by('created_at', 'ASC')
-            ->order_by('nip', 'ASC')
-            ->get()
-            ->result();
+        $this->db->select('nama, nip');
+        $this->db->from('pegawai');
+        $this->apply_jabatan_hierarchy_order();
+        $this->db->order_by('created_at', 'ASC');
+        $this->db->order_by('nip', 'ASC');
+        return $this->db->get()->result();
     }
 
     public function get_account_by_nip($nip)
@@ -54,6 +95,8 @@ class Pegawai_model extends CI_Model {
 
     public function insert($pegawai, $pribadi, $drh)
     {
+        $pegawai['jabatan_urutan'] = $this->get_jabatan_hierarchy_value(isset($pegawai['jabatan']) ? $pegawai['jabatan'] : '');
+
         $this->db->trans_start();
 
         $this->db->insert('pegawai', $pegawai);
@@ -66,6 +109,10 @@ class Pegawai_model extends CI_Model {
 
     public function insert_pending($data)
     {
+        $data['jenis'] = isset($data['jenis']) && trim((string) $data['jenis']) !== ''
+            ? strtolower(trim((string) $data['jenis']))
+            : 'baru';
+
         $existing = $this->db
             ->where('nip', $data['nip'])
             ->get('pegawai_pending')
@@ -91,6 +138,8 @@ class Pegawai_model extends CI_Model {
 
     public function update($nip, $pegawai, $pribadi, $drh)
     {
+        $pegawai['jabatan_urutan'] = $this->get_jabatan_hierarchy_value(isset($pegawai['jabatan']) ? $pegawai['jabatan'] : '');
+
         $this->db->trans_start();
 
         $this->db->where('nip', $nip);
@@ -184,24 +233,25 @@ class Pegawai_model extends CI_Model {
             return FALSE;
         }
 
+        $jenis = isset($pending->jenis) && trim((string) $pending->jenis) !== ''
+            ? strtolower(trim((string) $pending->jenis))
+            : 'baru';
+
         $pegawai = array(
-            'nip'                 => $pending->nip,
             'nama'                => $pending->nama,
             'gol_ruang_cpns'      => $pending->gol_ruang_cpns,
             'tmt_cpns'            => $pending->tmt_cpns,
             'pangkat_terakhir'    => $pending->pangkat_terakhir,
             'jenis_kelamin'       => $pending->jenis_kelamin,
             'jabatan'             => $pending->jabatan,
+            'jabatan_urutan'      => $this->get_jabatan_hierarchy_value($pending->jabatan),
             'eselon'              => $pending->eselon,
             'diklat_penjenjangan' => $pending->diklat_penjenjangan,
             'instansi_pembayar'   => $pending->instansi_pembayar,
             'keterangan'          => $pending->keterangan,
-            'role'                => 'pegawai',
-            'password'            => $default_password_hash,
         );
 
         $pribadi = array(
-            'nip'            => $pending->nip,
             'tempat_lahir'   => $pending->tempat_lahir,
             'tanggal_lahir'  => $pending->tanggal_lahir,
             'status_kawin'   => $pending->status_kawin,
@@ -211,7 +261,6 @@ class Pegawai_model extends CI_Model {
         );
 
         $drh = array(
-            'nip'                => $pending->nip,
             'tingkat_pendidikan' => $pending->tingkat_pendidikan,
             'jurusan'            => $pending->jurusan,
             'tahun_lulus'        => $pending->tahun_lulus,
@@ -220,9 +269,32 @@ class Pegawai_model extends CI_Model {
 
         $this->db->trans_start();
 
-        $this->db->insert('pegawai', $pegawai);
-        $this->db->insert('pegawai_pribadi', $pribadi);
-        $this->db->insert('pegawai_drh', $drh);
+        if ($jenis === 'update' && $this->nip_exists($pending->nip)) {
+            $this->db->where('nip', $pending->nip);
+            $this->db->update('pegawai', $pegawai);
+
+            if ($this->db->where('nip', $pending->nip)->count_all_results('pegawai_pribadi') > 0) {
+                $this->db->where('nip', $pending->nip);
+                $this->db->update('pegawai_pribadi', $pribadi);
+            } else {
+                $this->db->insert('pegawai_pribadi', array_merge(array('nip' => $pending->nip), $pribadi));
+            }
+
+            if ($this->db->where('nip', $pending->nip)->count_all_results('pegawai_drh') > 0) {
+                $this->db->where('nip', $pending->nip);
+                $this->db->update('pegawai_drh', $drh);
+            } else {
+                $this->db->insert('pegawai_drh', array_merge(array('nip' => $pending->nip), $drh));
+            }
+        } else {
+            $this->db->insert('pegawai', array_merge(array(
+                'nip'      => $pending->nip,
+                'role'     => 'pegawai',
+                'password' => $default_password_hash,
+            ), $pegawai));
+            $this->db->insert('pegawai_pribadi', array_merge(array('nip' => $pending->nip), $pribadi));
+            $this->db->insert('pegawai_drh', array_merge(array('nip' => $pending->nip), $drh));
+        }
 
         $this->db->where('id', $id);
         $this->db->update('pegawai_pending', array(

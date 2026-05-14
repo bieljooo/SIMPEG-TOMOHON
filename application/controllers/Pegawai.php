@@ -7,9 +7,13 @@ class Pegawai extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('Pegawai_model');
+        $this->load->helper('simpeg_pegawai');
 
-        // Hanya admin/petugas/kasubag yang boleh akses
-        if (!$this->session->userdata('logged_in') || $this->session->userdata('role') === 'pegawai') {
+        // Hanya petugas dan kasubag yang boleh akses
+        if (
+            !$this->session->userdata('logged_in') ||
+            !in_array($this->session->userdata('role'), array('petugas', 'kasubag'), TRUE)
+        ) {
             redirect('auth');
         }
     }
@@ -40,6 +44,7 @@ class Pegawai extends CI_Controller {
         $this->guard_read_only_role();
 
         $nip = $this->input->post('nip', TRUE);
+        $pangkat_terakhir = trim((string) $this->input->post('pangkat_terakhir', TRUE));
 
         if ($this->Pegawai_model->nip_exists($nip) || $this->Pegawai_model->pending_nip_exists($nip)) {
             $this->session->set_flashdata('error', 'NIP sudah terdaftar atau masih menunggu persetujuan Kasubag.');
@@ -47,37 +52,74 @@ class Pegawai extends CI_Controller {
             return;
         }
 
-        $pending = array(
-            'nip'                 => $nip,
+        if (!simpeg_is_valid_pangkat_terakhir($pangkat_terakhir)) {
+            $this->session->set_flashdata('error', 'Pangkat / Gol. Ruang Terakhir harus dipilih dari daftar yang tersedia.');
+            redirect('pegawai/tambah');
+            return;
+        }
+
+        $pegawai = array(
             'nama'                => $this->input->post('nama', TRUE),
             'gol_ruang_cpns'      => $this->input->post('gol_ruang_cpns', TRUE),
             'tmt_cpns'            => $this->input->post('tmt_cpns', TRUE) ?: NULL,
-            'pangkat_terakhir'    => $this->input->post('pangkat_terakhir', TRUE),
+            'pangkat_terakhir'    => $pangkat_terakhir,
             'jenis_kelamin'       => $this->input->post('jenis_kelamin', TRUE),
             'jabatan'             => $this->input->post('jabatan', TRUE),
             'eselon'              => $this->input->post('eselon', TRUE),
             'diklat_penjenjangan' => $this->input->post('diklat_penjenjangan', TRUE),
             'instansi_pembayar'   => $this->input->post('instansi_pembayar', TRUE),
             'keterangan'          => $this->input->post('keterangan', TRUE),
+        );
+
+        $pribadi = array(
             'tempat_lahir'   => $this->input->post('tempat_lahir', TRUE),
             'tanggal_lahir'  => $this->input->post('tanggal_lahir', TRUE) ?: NULL,
             'status_kawin'   => $this->input->post('status_kawin', TRUE),
             'agama'          => $this->input->post('agama', TRUE),
             'alamat'         => $this->input->post('alamat', TRUE),
             'no_telp'        => $this->input->post('no_telp', TRUE),
+        );
+
+        $drh = array(
             'tingkat_pendidikan' => $this->input->post('tingkat_pendidikan', TRUE),
             'jurusan'            => $this->input->post('jurusan', TRUE),
             'tahun_lulus'        => $this->input->post('tahun_lulus', TRUE) ?: NULL,
             'alumni'             => $this->input->post('alumni', TRUE),
         );
 
-        if (!$this->Pegawai_model->insert_pending($pending)) {
-            $this->session->set_flashdata('error', 'Data pegawai gagal diajukan. Silakan cek kembali data draft yang sudah pernah diproses.');
+        if ($this->Pegawai_model->requires_kasubag_verification($pegawai['jabatan'])) {
+            $pending = array_merge(
+                array(
+                    'nip' => $nip,
+                    'jenis' => 'baru',
+                ),
+                $pegawai,
+                $pribadi,
+                $drh
+            );
+
+            if (!$this->Pegawai_model->insert_pending($pending)) {
+                $this->session->set_flashdata('error', 'Data pegawai gagal diajukan. Silakan cek kembali data draft yang sudah pernah diproses.');
+                redirect('pegawai/tambah');
+                return;
+            }
+
+            $this->session->set_flashdata('success', 'Data pegawai berhasil diajukan dan menunggu persetujuan Kasubag.');
+            redirect('pegawai');
+            return;
+        }
+
+        $pegawai['nip'] = $nip;
+        $pegawai['role'] = 'pegawai';
+        $pegawai['password'] = password_hash(DEFAULT_PEGAWAI_PASSWORD, PASSWORD_DEFAULT);
+
+        if (!$this->Pegawai_model->insert($pegawai, array_merge(array('nip' => $nip), $pribadi), array_merge(array('nip' => $nip), $drh))) {
+            $this->session->set_flashdata('error', 'Data pegawai gagal disimpan.');
             redirect('pegawai/tambah');
             return;
         }
 
-        $this->session->set_flashdata('success', 'Data pegawai berhasil diajukan dan menunggu persetujuan Kasubag.');
+        $this->session->set_flashdata('success', 'Data pegawai berhasil disimpan. Pegawai baru dapat login dengan password default ' . DEFAULT_PEGAWAI_PASSWORD . '.');
         redirect('pegawai');
     }
 
@@ -181,12 +223,25 @@ class Pegawai extends CI_Controller {
     public function update($nip)
     {
         $this->guard_read_only_role();
+        $existing_pegawai = $this->Pegawai_model->get_by_nip($nip);
+
+        if (empty($existing_pegawai)) {
+            show_404();
+        }
+
+        $pangkat_terakhir = trim((string) $this->input->post('pangkat_terakhir', TRUE));
+
+        if (!simpeg_is_valid_pangkat_terakhir($pangkat_terakhir, array($existing_pegawai->pangkat_terakhir))) {
+            $this->session->set_flashdata('error', 'Pangkat / Gol. Ruang Terakhir harus dipilih dari daftar yang tersedia.');
+            redirect('pegawai/edit/' . $nip);
+            return;
+        }
 
         $pegawai = array(
             'nama'                => $this->input->post('nama', TRUE),
             'gol_ruang_cpns'      => $this->input->post('gol_ruang_cpns', TRUE),
             'tmt_cpns'            => $this->input->post('tmt_cpns', TRUE) ?: NULL,
-            'pangkat_terakhir'    => $this->input->post('pangkat_terakhir', TRUE),
+            'pangkat_terakhir'    => $pangkat_terakhir,
             'jenis_kelamin'       => $this->input->post('jenis_kelamin', TRUE),
             'jabatan'             => $this->input->post('jabatan', TRUE),
             'eselon'              => $this->input->post('eselon', TRUE),

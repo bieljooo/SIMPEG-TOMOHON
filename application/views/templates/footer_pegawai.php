@@ -12,11 +12,54 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?= base_url('assets/js/simpeg-shell.js') ?>"></script>
 
 <script>
+    // Init DataTables
+    $(document).ready(function() {
+        var $table = $('#dataTable');
+
+        if (!$table.length) {
+            return;
+        }
+
+        var enableSearch = String($table.data('dt-search')) === 'true';
+        var preserveOrder = String($table.data('dt-preserve-order')) === 'true';
+        var tableConfig = {
+            "searching": enableSearch,
+            "language": {
+                "search": "Cari:",
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                "infoEmpty": "Tidak ada data",
+                "infoFiltered": "(difilter dari _MAX_ total data)",
+                "emptyTable": "Belum ada data untuk ditampilkan",
+                "zeroRecords": "Data tidak ditemukan",
+                "paginate": {
+                    "first": "Awal",
+                    "last": "Akhir",
+                    "next": "Selanjutnya",
+                    "previous": "Sebelumnya"
+                }
+            },
+            "pageLength": 10,
+            "responsive": false,
+            "scrollX": true,
+            "autoWidth": false
+        };
+
+        if (preserveOrder) {
+            tableConfig.order = [];
+        }
+
+        $table.DataTable(tableConfig);
+    });
+
     function confirmDeleteSurat(url, namaSurat) {
         Swal.fire({
             title: 'Hapus Surat?',
@@ -30,6 +73,57 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = url;
+            }
+        });
+    }
+
+    function confirmApproval(formId, nama) {
+        Swal.fire({
+            title: 'Setujui Data?',
+            html: 'Setujui data surat <strong>' + nama + '</strong>?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#16a34a',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Setujui!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(formId).submit();
+            }
+        });
+    }
+
+    function confirmRejection(formId, nama) {
+        Swal.fire({
+            title: 'Tolak Data?',
+            html: 'Tolak data surat <strong>' + nama + '</strong>?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Tolak!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(formId).submit();
+            }
+        });
+    }
+
+    function confirmSubmitUsulan(formId, namaUsulan) {
+        Swal.fire({
+            title: 'Ajukan Usulan?',
+            html: 'Ingin Mengajukan Usulan <strong>' + namaUsulan + '</strong>?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#f87171',
+            confirmButtonText: 'Ya, Ajukan',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(formId).submit();
             }
         });
     }

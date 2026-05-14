@@ -84,13 +84,8 @@ class Auth extends CI_Controller {
 
     private function redirect_by_role($role)
     {
-        if ($role === 'pegawai') {
+        if (in_array($role, array('pegawai', 'kasubag', 'kadis', 'sek'), TRUE)) {
             redirect('dashboard');
-            return;
-        }
-
-        if ($role === 'kasubag') {
-            redirect('persetujuan_pegawai');
             return;
         }
 

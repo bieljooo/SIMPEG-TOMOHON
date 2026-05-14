@@ -1,5 +1,5 @@
-<!-- Breadcrumb -->
-<?php $home_url = ($this->session->userdata('role') === 'petugas') ? site_url('dashboard_petugas') : site_url('pegawai'); ?>
+<?php $home_url = site_url('dashboard_petugas'); ?>
+
 <nav class="breadcrumb-wrapper">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= $home_url ?>">Home</a></li>
@@ -10,14 +10,16 @@
 
 <?php
 $total_surat = count($surat_masuk);
-$belum_dinomori = 0;
-$sudah_dinomori = 0;
+$menunggu_nomor = 0;
+$selesai = 0;
 
 foreach ($surat_masuk as $item) {
-    if (empty($item->nomor_surat)) {
-        $belum_dinomori++;
-    } else {
-        $sudah_dinomori++;
+    if ($item->status === 'pending_petugas') {
+        $menunggu_nomor++;
+    }
+
+    if ($item->status === 'approved') {
+        $selesai++;
     }
 }
 ?>
@@ -43,8 +45,8 @@ foreach ($surat_masuk as $item) {
                     <iconify-icon icon="mdi:timer-sand" style="font-size:20px;color:#dd6b20"></iconify-icon>
                 </div>
                 <div>
-                    <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $belum_dinomori ?></div>
-                    <div style="font-size:12px;color:#a0aec0;font-weight:500">Belum Dinomori</div>
+                    <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $menunggu_nomor ?></div>
+                    <div style="font-size:12px;color:#a0aec0;font-weight:500">Menunggu Nomor</div>
                 </div>
             </div>
         </div>
@@ -56,8 +58,8 @@ foreach ($surat_masuk as $item) {
                     <iconify-icon icon="mdi:check-circle-outline" style="font-size:20px;color:#38a169"></iconify-icon>
                 </div>
                 <div>
-                    <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $sudah_dinomori ?></div>
-                    <div style="font-size:12px;color:#a0aec0;font-weight:500">Sudah Dinomori</div>
+                    <div style="font-size:22px;font-weight:700;color:#2d3748"><?= $selesai ?></div>
+                    <div style="font-size:12px;color:#a0aec0;font-weight:500">Selesai</div>
                 </div>
             </div>
         </div>
@@ -74,13 +76,13 @@ foreach ($surat_masuk as $item) {
                 <thead>
                     <tr>
                         <th style="width:40px">No</th>
-                        <th>Tanggal Masuk</th>
+                        <th>Tanggal Pengajuan</th>
                         <th>Jenis Surat</th>
-                        <th>Pegawai</th>
-                        <th>Tanggal Izin</th>
-                        <th>Penandatangan</th>
+                        <th>Pemohon</th>
+                        <th>Pangkat</th>
                         <th>Nomor Surat</th>
-                        <th style="width:120px">Aksi</th>
+                        <th>Status</th>
+                        <th style="width:160px">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,16 +90,12 @@ foreach ($surat_masuk as $item) {
                         <tr>
                             <td class="text-center"><?= $no++ ?></td>
                             <td><?= $item->created_at ? date('d/m/Y H:i', strtotime($item->created_at)) : '-' ?></td>
-                            <td>
-                                <strong>Surat Keterangan Sakit</strong>
-                                <br><small class="text-muted text-capitalize"><?= $item->jenis ?></small>
-                            </td>
+                            <td><?= $item->jenis_surat_label ?></td>
                             <td>
                                 <strong><?= $item->nama ?: '-' ?></strong>
-                                <br><small class="text-muted"><code><?= $item->nip ?></code></small>
+                                <br><small class="text-muted"><?= $item->nip ?></small>
                             </td>
-                            <td><?= $item->tanggal_izin ? date('d/m/Y', strtotime($item->tanggal_izin)) : '-' ?></td>
-                            <td><?= $item->penandatangan ?></td>
+                            <td><?= $item->pangkat ?: '-' ?></td>
                             <td>
                                 <?php if (!empty($item->nomor_surat)): ?>
                                     <strong><?= $item->nomor_surat ?></strong>
@@ -108,10 +106,36 @@ foreach ($surat_masuk as $item) {
                                     <span class="badge" style="background:#fff3cd;color:#7a5a00">Belum Dinomori</span>
                                 <?php endif; ?>
                             </td>
+                            <td>
+                                <?php
+                                $status_badge = 'color:#4a5568;font-weight:600;';
+                                if ($item->status === 'pending_petugas') {
+                                    $status_badge = 'color:#2c5282;font-weight:600;';
+                                } elseif ($item->status === 'pending_kasubag' || $item->status === 'pending_sek' || $item->status === 'pending_kadis') {
+                                    $status_badge = 'color:#975a16;font-weight:600;';
+                                } elseif ($item->status === 'approved') {
+                                    $status_badge = 'color:#1f8f56;font-weight:600;';
+                                } elseif (strpos($item->status, 'rejected_') === 0) {
+                                    $status_badge = 'color:#c53030;font-weight:600;';
+                                }
+                                ?>
+                                <span style="<?= $status_badge ?>"><?= $item->status_label ?></span>
+                            </td>
                             <td class="text-center">
-                                <a href="<?= site_url('surat/nomor/' . $item->id) ?>" class="btn btn-secondary btn-sm" title="<?= empty($item->nomor_surat) ? 'Beri Nomor' : 'Ubah Nomor' ?>">
-                                    <iconify-icon icon="mdi:format-list-numbered"></iconify-icon>
-                                </a>
+                                <div class="table-action-group">
+                                    <?php if ($item->status === 'pending_petugas'): ?>
+                                    <a href="<?= site_url('surat/nomor/' . $item->id) ?>" class="btn btn-secondary btn-sm" title="Nomor">
+                                        <iconify-icon icon="mdi:format-list-numbered"></iconify-icon>
+                                    </a>
+                                    <?php endif; ?>
+                                    <button
+                                        type="button"
+                                        class="btn btn-action-delete btn-sm"
+                                        title="Hapus"
+                                        onclick="confirmDelete('<?= site_url('surat/hapus/' . $item->id) ?>', '<?= addslashes($item->jenis_surat_label . ' - ' . $item->nama) ?>')">
+                                        <iconify-icon icon="mdi:trash-can-outline"></iconify-icon>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

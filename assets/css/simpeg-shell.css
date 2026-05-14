@@ -387,7 +387,7 @@ html.theme-dark .brand-logo-box {
     min-height: 54px;
     padding: 12px 16px;
     border-radius: 18px;
-    background: var(--surface-soft);
+    background: transparent;
     border: 1px solid transparent;
     color: var(--heading);
     font-family: var(--font-body);
@@ -400,14 +400,14 @@ html.theme-dark .brand-logo-box {
 .sidebar-utility-link:hover,
 .theme-toggle:hover {
     transform: translateY(-1px);
-    background: #fee2e2;
-    color: #991b1b;
+    background: transparent;
+    color: var(--heading);
 }
 
 .sidebar-utility-link.active {
-    background: #fee2e2;
-    border-color: #fecaca;
-    color: #991b1b;
+    background: transparent;
+    border-color: transparent;
+    color: var(--heading);
 }
 
 .sidebar-utility-link {
@@ -1008,10 +1008,17 @@ textarea.form-control {
 }
 
 .badge {
-    border-radius: 999px;
-    padding: 7px 12px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    display: inline;
+    padding: 0 !important;
+    margin: 0;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    color: inherit;
+    font-weight: 600;
+    letter-spacing: 0;
+    box-shadow: none !important;
 }
 
 .badge-laki {
@@ -1044,6 +1051,17 @@ textarea.form-control {
     font-weight: 700;
     letter-spacing: 0;
     box-shadow: none;
+}
+
+code {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    box-shadow: none !important;
 }
 
 .gender-code {
@@ -1085,14 +1103,15 @@ textarea.form-control {
 }
 
 code {
-    padding: 4px 8px;
-    border-radius: 10px;
-    background: var(--surface-soft);
-    color: var(--heading);
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
 }
 
 h5[style*="color:#3182ce"] {
@@ -1319,7 +1338,10 @@ html.theme-dark .auth-card {
 
 html.theme-dark .nav-menu li a:hover,
 html.theme-dark .sidebar-utility-link,
-html.theme-dark .theme-toggle,
+html.theme-dark .theme-toggle {
+    background: transparent;
+}
+
 html.theme-dark .toggle-btn {
     background: rgba(220, 38, 38, 0.14);
 }
@@ -1346,14 +1368,17 @@ html.theme-dark .nav-submenu {
 }
 
 html.theme-dark .sidebar-utility-link:hover,
-html.theme-dark .theme-toggle:hover,
+html.theme-dark .theme-toggle:hover {
+    background: transparent;
+}
+
 html.theme-dark .toggle-btn:hover {
     background: rgba(220, 38, 38, 0.22);
 }
 
 html.theme-dark .sidebar-utility-link.active {
-    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-    border-color: #991b1b;
+    background: transparent;
+    border-color: transparent;
     color: #ffffff;
 }
 
@@ -1611,12 +1636,17 @@ html.theme-dark [style*="border-bottom:2px solid #ebf4ff"] {
 }
 
 .settings-card {
-    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.88);
+}
+
+html.theme-dark .settings-card {
+    background: rgba(37, 37, 37, 0.96);
 }
 
 .settings-card .card-header {
     padding-top: 22px;
     padding-bottom: 18px;
+    border-bottom: 0;
 }
 
 .settings-card .card-header h3 {
@@ -1834,6 +1864,43 @@ html.theme-dark [style*="border-bottom:2px solid #ebf4ff"] {
     align-items: center;
     gap: 10px;
     margin-top: 6px;
+}
+
+.btn-cancel-action {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-cancel-action:hover,
+.btn-cancel-action:focus,
+.btn-cancel-action:active {
+    background: #b91c1c !important;
+    border-color: #b91c1c !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.btn-cancel-action iconify-icon,
+.btn-cancel-action span,
+.btn-cancel-action strong {
+    color: inherit !important;
+    background: transparent !important;
+}
+
+html.theme-dark .btn-cancel-action,
+html.theme-dark .btn-cancel-action:hover,
+html.theme-dark .btn-cancel-action:focus,
+html.theme-dark .btn-cancel-action:active {
+    color: #ffffff !important;
+    box-shadow: none !important;
 }
 
 @media (max-width: 1199px) {

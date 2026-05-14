@@ -24,14 +24,14 @@ class Master_surat_model extends CI_Model {
             ),
             array(
                 'kode_template' => 'usulan_cuti_tahun',
-                'nama_template' => 'Template Usulan Cuti Tahun',
-                'sub_menu' => 'Usulan Cuti Tahun',
+                'nama_template' => 'Template Usulan Cuti Tahunan',
+                'sub_menu' => 'Usulan Cuti Tahunan',
                 'sort_order' => 3,
             ),
             array(
                 'kode_template' => 'usulan_alasan_penting',
-                'nama_template' => 'Template Usulan Alasan Penting',
-                'sub_menu' => 'Usulan Alasan Penting',
+                'nama_template' => 'Template Usulan Cuti Alasan Penting',
+                'sub_menu' => 'Usulan Cuti Alasan Penting',
                 'sort_order' => 4,
             ),
             array(
@@ -39,6 +39,12 @@ class Master_surat_model extends CI_Model {
                 'nama_template' => 'Template Usulan Kenaikan Gaji Berkala',
                 'sub_menu' => 'Usulan Kenaikan Gaji Berkala',
                 'sort_order' => 5,
+            ),
+            array(
+                'kode_template' => 'usulan_cuti_luar_negeri',
+                'nama_template' => 'Template Usulan Cuti Luar Negeri',
+                'sub_menu' => 'Usulan Cuti Luar Negeri',
+                'sort_order' => 6,
             ),
         );
 

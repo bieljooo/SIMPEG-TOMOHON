@@ -19,7 +19,7 @@
                 <iconify-icon icon="mdi:pencil-outline" class="mr-1"></iconify-icon> Edit
             </a>
             <?php endif; ?>
-            <a href="<?= site_url('pegawai') ?>" class="btn btn-secondary btn-sm">
+            <a href="<?= site_url('pegawai') ?>" class="btn btn-cancel-action btn-sm">
                 <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
             </a>
         </div>

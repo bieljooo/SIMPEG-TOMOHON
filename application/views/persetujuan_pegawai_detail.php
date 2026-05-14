@@ -13,7 +13,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3><iconify-icon icon="mdi:account-outline" class="mr-2"></iconify-icon>Detail Pengajuan Pegawai</h3>
         <div>
-            <a href="<?= site_url('persetujuan_pegawai') ?>" class="btn btn-secondary btn-sm">
+            <a href="<?= site_url('persetujuan_pegawai') ?>" class="btn btn-cancel-action btn-sm">
                 <iconify-icon icon="mdi:arrow-left" class="mr-1"></iconify-icon> Kembali
             </a>
         </div>
@@ -29,6 +29,9 @@
                 <span style="color:#718096;font-size:14px">NIP: <?= $p->nip ?></span>
                 <span class="ml-3 gender-label" style="font-size:12px">
                     <?= ($p->jenis_kelamin == 'L') ? 'Laki-laki' : 'Perempuan' ?>
+                </span>
+                <span class="ml-2" style="color:#718096;font-size:12px">
+                    Jenis: <?= (!empty($p->jenis) && strtolower((string) $p->jenis) === 'update') ? 'Update Data' : 'Data Baru' ?>
                 </span>
             </div>
         </div>

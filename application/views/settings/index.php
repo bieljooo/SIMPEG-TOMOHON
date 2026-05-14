@@ -12,7 +12,7 @@ $initial_letter = strtoupper(substr($account_name, 0, 1));
 </nav>
 
 <form action="<?= site_url('settings/update') ?>" method="POST" enctype="multipart/form-data" id="settingsForm" class="settings-layout">
-    <div class="card settings-card">
+    <div class="card card-flat-shell settings-card">
         <div class="card-header">
             <h3><iconify-icon icon="mdi:account-circle-outline" class="mr-2"></iconify-icon>Foto Profil</h3>
             <p>Perbarui foto profil Anda agar mudah dikenali oleh anggota tim lain.</p>
@@ -57,7 +57,7 @@ $initial_letter = strtoupper(substr($account_name, 0, 1));
         </div>
     </div>
 
-    <div class="card settings-card">
+    <div class="card card-flat-shell settings-card">
         <div class="card-header">
             <h3><iconify-icon icon="lucide:shield-check" class="mr-2"></iconify-icon>Keamanan &amp; Password</h3>
             <p>Pastikan Anda menggunakan password yang kuat dan unik untuk menjaga keamanan akun.</p>
@@ -90,7 +90,7 @@ $initial_letter = strtoupper(substr($account_name, 0, 1));
                     <iconify-icon icon="lucide:save"></iconify-icon>
                     <span>Simpan Perubahan</span>
                 </button>
-                <a href="<?= $home_url ?>" class="btn btn-secondary">Batal</a>
+                <a href="<?= $home_url ?>" class="btn btn-cancel-action">Batal</a>
             </div>
         </div>
     </div>
