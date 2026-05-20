@@ -22,11 +22,11 @@
         <!-- Header Info -->
         <div class="d-flex align-items-center mb-4 p-3" style="background:#f7fafc;border-radius:8px;border-left:4px solid #3182ce">
             <?php if (!empty($profile_photo)): ?>
-            <div class="user-avatar-photo" style="width:60px;height:60px;border-radius:50%;background-image:url('<?= base_url($profile_photo) ?>');background-position:<?= htmlspecialchars($profile_position, ENT_QUOTES, 'UTF-8') ?>;background-size:cover;background-repeat:no-repeat;margin-right:16px"></div>
+                <div class="user-avatar-photo" style="width:60px;height:60px;border-radius:50%;background-image:url('<?= base_url($profile_photo) ?>');background-position:<?= htmlspecialchars($profile_position, ENT_QUOTES, 'UTF-8') ?>;background-size:cover;background-repeat:no-repeat;margin-right:16px"></div>
             <?php else: ?>
-            <div style="width:60px;height:60px;border-radius:50%;background:#3182ce;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;margin-right:16px">
-                <?= strtoupper(substr($p->nama, 0, 1)) ?>
-            </div>
+                <div style="width:60px;height:60px;border-radius:50%;background:#3182ce;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;margin-right:16px">
+                    <?= strtoupper(substr($p->nama, 0, 1)) ?>
+                </div>
             <?php endif; ?>
             <div>
                 <h4 style="margin:0;color:#2d3748;font-weight:700"><?= $p->nama ?></h4>
@@ -166,14 +166,13 @@
 
         <!-- Keterangan -->
         <?php if ($p->keterangan): ?>
-        <div class="mb-3">
-            <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
-                <iconify-icon icon="mdi:note-text-outline" class="mr-2"></iconify-icon>Keterangan
-            </h5>
-        </div>
-        <p style="color:#4a5568"><?= $p->keterangan ?></p>
+            <div class="mb-3">
+                <h5 style="color:#3182ce;font-weight:700;border-bottom:2px solid #ebf4ff;padding-bottom:8px">
+                    <iconify-icon icon="mdi:note-text-outline" class="mr-2"></iconify-icon>Keterangan
+                </h5>
+            </div>
+            <p style="color:#4a5568"><?= $p->keterangan ?></p>
         <?php endif; ?>
 
     </div>
 </div>
-
